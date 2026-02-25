@@ -49,7 +49,7 @@ public class Animator {
     private String phone;
 
 
-    @OneToMany(mappedBy = "animator", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "animator", fetch = FetchType.LAZY)
     private final List<Reservation> reservations = new ArrayList<>();
 
 

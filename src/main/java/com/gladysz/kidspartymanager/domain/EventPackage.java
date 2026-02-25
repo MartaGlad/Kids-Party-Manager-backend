@@ -54,7 +54,7 @@ public class EventPackage {
     private int durationHr;
 
 
-    @OneToMany(mappedBy = "eventPackage", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "eventPackage", fetch = FetchType.LAZY)
     private final List<Reservation> reservations = new ArrayList<>();
 
 
@@ -70,6 +70,7 @@ public class EventPackage {
 
     @Override
     public int hashCode() {
+
         return this.id != null ? this.id.hashCode() : 0;
     }
 

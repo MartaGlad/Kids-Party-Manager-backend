@@ -80,6 +80,10 @@ public class Reservation {
     private LocalDateTime createdAt;
 
 
+    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private EventAssessment eventAssessment;
+
+
     @Override
     public boolean equals(Object o) {
 
@@ -93,5 +97,14 @@ public class Reservation {
     public int hashCode() {
 
         return this.id != null ? this.id.hashCode() : 0;
+    }
+
+
+    public void setEventAssessment(EventAssessment eventAssessment) {
+        this.eventAssessment = eventAssessment;
+
+        if (eventAssessment != null && eventAssessment.getReservation() != this) {
+            eventAssessment.setReservation(this);
+        }
     }
 }

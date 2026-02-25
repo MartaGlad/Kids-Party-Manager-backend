@@ -48,7 +48,7 @@ public class Orderer {
     private String phone;
 
 
-    @OneToMany(mappedBy = "orderer", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "orderer", fetch = FetchType.LAZY)
     private final List<Reservation> reservations = new ArrayList<>();
 
 
