@@ -60,7 +60,7 @@ public class Animator {
         if (! (o instanceof Animator animator)) return false;
 
         return this.id != null && this.id.equals(animator.id);
-}
+    }
 
 
     @Override

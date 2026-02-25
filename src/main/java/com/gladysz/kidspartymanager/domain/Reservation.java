@@ -37,6 +37,12 @@ public class Reservation {
 
 
     @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderer_id", nullable = false)
+    private Orderer orderer;
+
+
+    @Setter
     @NotNull
     @Column(name = "event_date_time", nullable = false)
     private LocalDateTime eventDateTime;
