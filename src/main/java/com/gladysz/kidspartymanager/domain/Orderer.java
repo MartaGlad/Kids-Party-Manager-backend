@@ -44,7 +44,7 @@ public class Orderer {
 
     @Setter
     @NotBlank
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
 
