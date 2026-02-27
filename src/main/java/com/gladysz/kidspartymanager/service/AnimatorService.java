@@ -41,16 +41,18 @@ public class AnimatorService {
     }
 
 
-    public void updateAnimator(final Long id, final AnimatorUpdateDto animatorUpdateDto) {
+    public Animator updateAnimator(final Long id, final AnimatorUpdateDto animatorUpdateDto) {
 
         Animator fetchedAnimator = animatorRepository.findById(id)
                 .orElseThrow(() -> new AnimatorNotFoundException(id));
 
         animatorMapper.mapToAnimator(fetchedAnimator, animatorUpdateDto);
+        return fetchedAnimator;
     }
 
 
     public void deleteAnimatorById(final Long id) {
+
         Animator fetchedAnimator = animatorRepository.findById(id)
                 .orElseThrow(() -> new AnimatorNotFoundException(id));
 

@@ -50,7 +50,7 @@ public class Animator {
 
 
     @OneToMany(mappedBy = "animator", fetch = FetchType.LAZY)
-    private final List<Reservation> reservations = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
 
 
     @Override
