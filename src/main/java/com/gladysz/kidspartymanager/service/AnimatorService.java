@@ -46,7 +46,8 @@ public class AnimatorService {
         Animator fetchedAnimator = animatorRepository.findById(id)
                 .orElseThrow(() -> new AnimatorNotFoundException(id));
 
-        animatorMapper.mapToAnimator(fetchedAnimator, animatorUpdateDto);
+        animatorMapper.applyUpdate(fetchedAnimator, animatorUpdateDto);
+
         return fetchedAnimator;
     }
 

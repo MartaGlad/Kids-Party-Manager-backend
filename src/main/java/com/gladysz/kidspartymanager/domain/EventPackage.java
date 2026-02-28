@@ -55,7 +55,7 @@ public class EventPackage {
 
 
     @OneToMany(mappedBy = "eventPackage", fetch = FetchType.LAZY)
-    private final List<Reservation> reservations = new ArrayList<>();
+    private List<Reservation> reservations = new ArrayList<>();
 
 
     @Override

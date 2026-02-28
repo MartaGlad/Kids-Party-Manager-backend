@@ -27,7 +27,7 @@ public class AnimatorMapper {
     }
 
 
-    public void mapToAnimator(final Animator animator, final AnimatorUpdateDto animatorUpdateDto) {
+    public void applyUpdate(final Animator animator, final AnimatorUpdateDto animatorUpdateDto) {
 
         if (hasText(animatorUpdateDto.firstName())) {
             animator.setFirstName(normalizeName(animatorUpdateDto.firstName()));
