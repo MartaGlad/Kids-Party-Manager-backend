@@ -58,7 +58,8 @@ public class AnimatorController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<AnimatorResponseDto> updateAnimator(
-            @PathVariable Long id, @Valid @RequestBody AnimatorUpdateDto animatorUpdateDto) {
+            @PathVariable Long id,
+            @Valid @RequestBody AnimatorUpdateDto animatorUpdateDto) {
 
         Animator animatorUpdated = animatorService.updateAnimator(id, animatorUpdateDto);
 

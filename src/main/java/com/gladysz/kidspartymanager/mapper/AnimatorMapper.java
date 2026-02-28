@@ -20,21 +20,14 @@ public class AnimatorMapper {
     }
 
 
-    private String normalizeName(String name) {
-
-        String result = name.trim().toLowerCase();
-        return result.substring(0, 1).toUpperCase() + result.substring(1);
-    }
-
-
     public void applyUpdate(final Animator animator, final AnimatorUpdateDto animatorUpdateDto) {
 
         if (hasText(animatorUpdateDto.firstName())) {
-            animator.setFirstName(normalizeName(animatorUpdateDto.firstName()));
+            animator.setFirstName(animatorUpdateDto.firstName());
         }
 
         if (hasText(animatorUpdateDto.lastName())) {
-            animator.setLastName(normalizeName(animatorUpdateDto.lastName()));
+            animator.setLastName(animatorUpdateDto.lastName());
         }
 
         if (hasText(animatorUpdateDto.email())) {
@@ -51,8 +44,8 @@ public class AnimatorMapper {
 
         return new Animator (
                 null,
-                normalizeName(animatorCreateDto.firstName()),
-                normalizeName(animatorCreateDto.lastName()),
+                animatorCreateDto.firstName(),
+                animatorCreateDto.lastName(),
                 animatorCreateDto.email().trim().toLowerCase(),
                 animatorCreateDto.phone().trim(),
                 new ArrayList<>()
