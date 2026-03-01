@@ -38,7 +38,7 @@ public class EventPackage {
     @Setter
     @NotNull
     @DecimalMin("500")
-    @Column(name = "base_price", nullable = false)
+    @Column(name = "base_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal basePrice;
 
 

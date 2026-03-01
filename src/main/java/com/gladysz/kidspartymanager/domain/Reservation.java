@@ -1,5 +1,6 @@
 package com.gladysz.kidspartymanager.domain;
 
+import com.gladysz.kidspartymanager.exception.ReservationChangeStatusException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -70,7 +71,7 @@ public class Reservation {
     @Setter
     @NotNull
     @DecimalMin("500")
-    @Column(name = "price_snapshot", nullable = false)
+    @Column(name = "price_snapshot", nullable = false, precision = 10, scale = 2)
     private BigDecimal priceSnapshot;
 
 
@@ -105,6 +106,42 @@ public class Reservation {
 
         if (eventAssessment != null && eventAssessment.getReservation() != this) {
             eventAssessment.setReservation(this);
+        }
+    }
+
+
+    private boolean isChangeStatusAllowed(Status newStatus) {
+
+        return switch (this.status) {
+            case NEW -> newStatus == Status.CONFIRMED || newStatus == Status.CANCELLED;
+            case CONFIRMED -> newStatus == Status.CANCELLED;
+            case CANCELLED -> false;
+        };
+    }
+
+
+    public void changeStatus(Status newStatus) {
+
+        if (newStatus == null) throw new IllegalArgumentException("New status can't be null.");
+
+        if (newStatus == this.status) return;
+
+        if (!isChangeStatusAllowed(newStatus))
+            throw new ReservationChangeStatusException(this.status, newStatus);
+
+        this.status = newStatus;
+    }
+
+
+    @PrePersist
+    void prePersist() {
+
+        if (this.status == null) {
+            this.status = Status.NEW;
+        }
+
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
         }
     }
 }
