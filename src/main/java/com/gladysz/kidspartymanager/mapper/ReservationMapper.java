@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @Component
 public class ReservationMapper {
 
-
     public void applyUpdate(
             final Reservation reservation,
             final ReservationUpdateDto reservationUpdateDto) {
@@ -47,7 +46,8 @@ public class ReservationMapper {
     }
 
 
-    public List<ReservationResponseDto> mapToReservationResponseDtoList(final List<Reservation> reservations) {
+    public List<ReservationResponseDto> mapToReservationResponseDtoList(
+            final List<Reservation> reservations) {
 
         return reservations.stream()
                 .map(this::mapToReservationResponseDto)

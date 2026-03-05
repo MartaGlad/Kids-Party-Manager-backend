@@ -32,10 +32,11 @@ public class EventAssessment {
     private Reservation reservation;
 
 
+    @NotNull
     @Setter
     @Min(1)
     @Max(5)
-    @Column(name = "rating")
+    @Column(name = "rating", nullable = false)
     private Integer rating;
 
 
@@ -65,4 +66,14 @@ public class EventAssessment {
 
         return this.id != null ? this.id.hashCode() : 0;
     }
+
+
+    @PrePersist
+    void prePersist() {
+
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
+
 }

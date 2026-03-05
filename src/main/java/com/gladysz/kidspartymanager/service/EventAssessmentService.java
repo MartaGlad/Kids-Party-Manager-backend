@@ -1,0 +1,78 @@
+package com.gladysz.kidspartymanager.service;
+
+import com.gladysz.kidspartymanager.domain.*;
+
+import com.gladysz.kidspartymanager.dto.EventAssessmentCreateDto;
+import com.gladysz.kidspartymanager.dto.EventAssessmentUpdateDto;
+import com.gladysz.kidspartymanager.exception.EventAlreadyAssessedException;
+import com.gladysz.kidspartymanager.exception.EventAssessmentNotFoundException;
+import com.gladysz.kidspartymanager.mapper.EventAssessmentMapper;
+import com.gladysz.kidspartymanager.repository.EventAssessmentRepository;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class EventAssessmentService {
+
+    private final EventAssessmentRepository eventAssessmentRepository;
+    private final EventAssessmentMapper eventAssessmentMapper;
+    private final ReservationService reservationService;
+
+
+    public EventAssessment createNewEventAssessment(
+            final Long reservationId,
+            final EventAssessmentCreateDto eventAssessmentCreateDto) {
+
+        Reservation reservation = reservationService
+                .getReservationById(reservationId);
+
+        if (reservation.getEventAssessment() != null) {
+            throw new EventAlreadyAssessedException(reservationId);
+        }
+
+        EventAssessment eventAssessment = new EventAssessment();
+        eventAssessment.setRating(eventAssessmentCreateDto.rating());
+        eventAssessment.setComment(eventAssessmentCreateDto.comment());
+
+        reservation.setEventAssessment(eventAssessment);
+
+        return eventAssessmentRepository.save(eventAssessment);
+    }
+
+
+    @Transactional(readOnly = true)
+    public EventAssessment getByReservationId(final Long reservationId) {
+        Reservation reservation = reservationService.getReservationById(reservationId);
+
+        EventAssessment assessment = reservation.getEventAssessment();
+        if (assessment == null) {
+            throw new EventAssessmentNotFoundException(reservationId);
+        }
+        return assessment;
+    }
+
+
+    public EventAssessment updateByReservationId(
+            final Long reservationId,
+            final EventAssessmentUpdateDto eventAssessmentUpdateDto) {
+
+        EventAssessment fetchedAssessment = getByReservationId(reservationId);
+
+        eventAssessmentMapper.applyUpdate(fetchedAssessment, eventAssessmentUpdateDto);
+
+        return fetchedAssessment;
+    }
+
+
+    public void deleteByReservationId(final Long reservationId) {
+
+        EventAssessment fetchedAssessment = getByReservationId(reservationId);
+
+        eventAssessmentRepository.delete(fetchedAssessment);
+    }
+}
