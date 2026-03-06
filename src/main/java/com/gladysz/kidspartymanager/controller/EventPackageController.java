@@ -3,8 +3,9 @@ package com.gladysz.kidspartymanager.controller;
 
 import com.gladysz.kidspartymanager.domain.EventPackage;
 import com.gladysz.kidspartymanager.dto.EventPackageCreateDto;
+import com.gladysz.kidspartymanager.dto.EventPackagePutDto;
 import com.gladysz.kidspartymanager.dto.EventPackageResponseDto;
-import com.gladysz.kidspartymanager.dto.EventPackageUpdateDto;
+import com.gladysz.kidspartymanager.dto.EventPackagePatchDto;
 import com.gladysz.kidspartymanager.mapper.EventPackageMapper;
 import com.gladysz.kidspartymanager.service.EventPackageService;
 import jakarta.validation.Valid;
@@ -59,12 +60,26 @@ public class EventPackageController {
     }
 
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<EventPackageResponseDto> updateEventPackage(
+    @PutMapping("/{id}")
+    public ResponseEntity<EventPackageResponseDto> updatePutEventPackage(
             @PathVariable Long id,
-            @Valid @RequestBody EventPackageUpdateDto eventPackageUpdateDto) {
+            @Valid @RequestBody EventPackagePutDto eventPackagePutDto) {
 
-        EventPackage eventPackageUpdated = eventPackageService.updateEventPackage(id, eventPackageUpdateDto);
+        EventPackage eventPackageUpdated = eventPackageService
+                .updatePutEventPackage(id, eventPackagePutDto);
+
+        return ResponseEntity
+                .ok(eventPackageMapper.mapToEventPackageResponseDto(eventPackageUpdated));
+    }
+
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<EventPackageResponseDto> updatePatchEventPackage(
+            @PathVariable Long id,
+            @Valid @RequestBody EventPackagePatchDto eventPackagePatchDto) {
+
+        EventPackage eventPackageUpdated = eventPackageService
+                .updatePatchEventPackage(id, eventPackagePatchDto);
 
         return ResponseEntity
                 .ok(eventPackageMapper.mapToEventPackageResponseDto(eventPackageUpdated));

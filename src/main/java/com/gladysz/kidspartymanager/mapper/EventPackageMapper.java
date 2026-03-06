@@ -1,6 +1,5 @@
 package com.gladysz.kidspartymanager.mapper;
 
-import com.gladysz.kidspartymanager.domain.Animator;
 import com.gladysz.kidspartymanager.domain.EventPackage;
 import com.gladysz.kidspartymanager.dto.*;
 import org.springframework.stereotype.Component;
@@ -19,27 +18,41 @@ public class EventPackageMapper {
     }
 
 
-    public void applyUpdate(final EventPackage eventPackage, final EventPackageUpdateDto eventPackageUpdateDto) {
+    public void applyUpdatePatch(final EventPackage eventPackage, final EventPackagePatchDto eventPackagePatchDto) {
 
-        if (hasText(eventPackageUpdateDto.name())) {
-            eventPackage.setName(eventPackageUpdateDto.name().trim());
+        if (hasText(eventPackagePatchDto.name())) {
+            eventPackage.setName(eventPackagePatchDto.name().trim());
         }
 
-        if (hasText(eventPackageUpdateDto.description())) {
-            eventPackage.setDescription(eventPackageUpdateDto.description().trim());
+        if (hasText(eventPackagePatchDto.description())) {
+            eventPackage.setDescription(eventPackagePatchDto.description().trim());
         }
 
-        if (eventPackageUpdateDto.basePrice() != null) {
-            eventPackage.setBasePrice(eventPackageUpdateDto.basePrice());
+        if (eventPackagePatchDto.basePrice() != null) {
+            eventPackage.setBasePrice(eventPackagePatchDto.basePrice());
         }
 
-        if (eventPackageUpdateDto.maxChildrenCount() != null) {
-            eventPackage.setMaxChildrenCount(eventPackageUpdateDto.maxChildrenCount());
+        if (eventPackagePatchDto.maxChildrenCount() != null) {
+            eventPackage.setMaxChildrenCount(eventPackagePatchDto.maxChildrenCount());
         }
 
-        if (eventPackageUpdateDto.durationHr() != null) {
-            eventPackage.setDurationHr(eventPackageUpdateDto.durationHr());
+        if (eventPackagePatchDto.durationHr() != null) {
+            eventPackage.setDurationHr(eventPackagePatchDto.durationHr());
         }
+    }
+
+
+    public void applyUpdatePut(final EventPackage eventPackage, final EventPackagePutDto eventPackagePutDto) {
+
+        eventPackage.setName(eventPackagePutDto.name().trim());
+
+        eventPackage.setDescription(eventPackagePutDto.description().trim());
+
+        eventPackage.setBasePrice(eventPackagePutDto.basePrice());
+
+        eventPackage.setMaxChildrenCount(eventPackagePutDto.maxChildrenCount());
+
+        eventPackage.setDurationHr(eventPackagePutDto.durationHr());
     }
 
 
@@ -47,8 +60,8 @@ public class EventPackageMapper {
         
         return new EventPackage (
                 null,
-                eventPackageCreateDto.name().trim().toLowerCase(),
-                eventPackageCreateDto.description().trim().toLowerCase(),
+                eventPackageCreateDto.name().trim(),
+                eventPackageCreateDto.description().trim(),
                 eventPackageCreateDto.basePrice(),
                 eventPackageCreateDto.maxChildrenCount(),
                 eventPackageCreateDto.durationHr(),
@@ -76,6 +89,5 @@ public class EventPackageMapper {
                 .map(this::mapToEventPackageResponseDto)
                 .collect(Collectors.toList());
     }
-
 }
 

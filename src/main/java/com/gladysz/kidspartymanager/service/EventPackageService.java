@@ -1,7 +1,8 @@
 package com.gladysz.kidspartymanager.service;
 
 import com.gladysz.kidspartymanager.domain.EventPackage;
-import com.gladysz.kidspartymanager.dto.EventPackageUpdateDto;
+import com.gladysz.kidspartymanager.dto.EventPackagePatchDto;
+import com.gladysz.kidspartymanager.dto.EventPackagePutDto;
 import com.gladysz.kidspartymanager.exception.EventPackageNotFoundException;
 import com.gladysz.kidspartymanager.mapper.EventPackageMapper;
 import com.gladysz.kidspartymanager.repository.EventPackageRepository;
@@ -41,12 +42,21 @@ public class EventPackageService {
     }
 
 
-    public EventPackage updateEventPackage(final Long id, final EventPackageUpdateDto eventPackageUpdateDto) {
+    public EventPackage updatePatchEventPackage(final Long id, final EventPackagePatchDto eventPackagePatchDto) {
 
-        EventPackage fetchedEventPackage = eventPackageRepository.findById(id)
-                .orElseThrow(() -> new EventPackageNotFoundException(id));
+        EventPackage fetchedEventPackage = getEventPackageById(id);
 
-        eventPackageMapper.applyUpdate(fetchedEventPackage, eventPackageUpdateDto);
+        eventPackageMapper.applyUpdatePatch(fetchedEventPackage, eventPackagePatchDto);
+
+        return fetchedEventPackage;
+    }
+
+
+    public EventPackage updatePutEventPackage(final Long id, final EventPackagePutDto eventPackagePutDto) {
+
+        EventPackage fetchedEventPackage = getEventPackageById(id);
+
+        eventPackageMapper.applyUpdatePut(fetchedEventPackage, eventPackagePutDto);
 
         return fetchedEventPackage;
     }
@@ -54,8 +64,7 @@ public class EventPackageService {
 
     public void deleteEventPackageById(final Long id) {
 
-        EventPackage fetchedEventPackage = eventPackageRepository.findById(id)
-                .orElseThrow(() -> new EventPackageNotFoundException(id));
+        EventPackage fetchedEventPackage = getEventPackageById(id);
 
         eventPackageRepository.delete(fetchedEventPackage);
     }
