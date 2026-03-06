@@ -47,17 +47,30 @@ public class EventAssessmentController {
     }
 
 
-    @PatchMapping()
-    public ResponseEntity<EventAssessmentResponseDto> updateEventAssessmentByReservationId (
+    @PutMapping()
+    public ResponseEntity<EventAssessmentResponseDto> updatePutEventAssessmentByReservationId (
             @PathVariable Long reservationId,
-            @Valid @RequestBody EventAssessmentUpdateDto eventAssessmentUpdateDto) {
+            @Valid @RequestBody EventAssessmentPutDto eventAssessmentPutDto) {
 
         EventAssessment eventAssessmentUpdated = eventAssessmentService
-                .updateByReservationId(reservationId, eventAssessmentUpdateDto);
+                .updatePutByReservationId(reservationId, eventAssessmentPutDto);
 
         return ResponseEntity
                 .ok(eventAssessmentMapper.mapToEventAssessmentResponseDto(eventAssessmentUpdated));
 
+    }
+
+
+    @PatchMapping()
+    public ResponseEntity<EventAssessmentResponseDto> updatePatchEventAssessmentByReservationId (
+            @PathVariable Long reservationId,
+            @Valid @RequestBody EventAssessmentPatchDto eventAssessmentPatchDto) {
+
+        EventAssessment eventAssessmentUpdated = eventAssessmentService
+                .updatePatchByReservationId(reservationId, eventAssessmentPatchDto);
+
+        return ResponseEntity
+                .ok(eventAssessmentMapper.mapToEventAssessmentResponseDto(eventAssessmentUpdated));
     }
 
 

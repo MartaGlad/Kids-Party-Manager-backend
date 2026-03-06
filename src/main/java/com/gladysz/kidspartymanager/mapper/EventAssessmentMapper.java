@@ -2,8 +2,10 @@ package com.gladysz.kidspartymanager.mapper;
 
 import com.gladysz.kidspartymanager.domain.EventAssessment;
 
+import com.gladysz.kidspartymanager.dto.EventAssessmentPatchDto;
+import com.gladysz.kidspartymanager.dto.EventAssessmentPutDto;
 import com.gladysz.kidspartymanager.dto.EventAssessmentResponseDto;
-import com.gladysz.kidspartymanager.dto.EventAssessmentUpdateDto;
+
 import org.springframework.stereotype.Component;
 
 
@@ -15,17 +17,28 @@ public class EventAssessmentMapper {
     }
 
 
-    public void applyUpdate(
+    public void applyUpdatePatch(
             final EventAssessment eventAssessment,
-            final EventAssessmentUpdateDto eventAssessmentUpdateDto) {
+            final EventAssessmentPatchDto eventAssessmentPatchDto) {
 
-        if (eventAssessmentUpdateDto.rating() != null) {
-            eventAssessment.setRating(eventAssessmentUpdateDto.rating());
+        if (eventAssessmentPatchDto.rating() != null) {
+            eventAssessment.setRating(eventAssessmentPatchDto.rating());
         }
 
-        if (hasText(eventAssessmentUpdateDto.comment())) {
-            eventAssessment.setComment(eventAssessmentUpdateDto.comment().trim());
+        if (hasText(eventAssessmentPatchDto.comment())) {
+            eventAssessment.setComment(eventAssessmentPatchDto.comment().trim());
         }
+    }
+
+
+    public void applyUpdatePut(
+            final EventAssessment eventAssessment,
+            final EventAssessmentPutDto eventAssessmentPutDto) {
+
+        eventAssessment.setRating(eventAssessmentPutDto.rating());
+
+        String newComment =  eventAssessmentPutDto.comment();
+        eventAssessment.setComment(newComment == null ? null : newComment.trim());
     }
 
 

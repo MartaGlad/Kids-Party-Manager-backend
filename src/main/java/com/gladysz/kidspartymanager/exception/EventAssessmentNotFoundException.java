@@ -2,9 +2,9 @@ package com.gladysz.kidspartymanager.exception;
 
 public class EventAssessmentNotFoundException extends RuntimeException {
 
-    public EventAssessmentNotFoundException(Long id) {
+    public EventAssessmentNotFoundException(Long reservationId) {
 
-        super("Event with id " + id + " has no assessment.");
+        super("EventAssessment for reservation with id " + reservationId + " not found.");
     }
 
 }

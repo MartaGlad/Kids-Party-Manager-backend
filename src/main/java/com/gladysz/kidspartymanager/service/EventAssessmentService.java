@@ -3,7 +3,8 @@ package com.gladysz.kidspartymanager.service;
 import com.gladysz.kidspartymanager.domain.*;
 
 import com.gladysz.kidspartymanager.dto.EventAssessmentCreateDto;
-import com.gladysz.kidspartymanager.dto.EventAssessmentUpdateDto;
+import com.gladysz.kidspartymanager.dto.EventAssessmentPatchDto;
+import com.gladysz.kidspartymanager.dto.EventAssessmentPutDto;
 import com.gladysz.kidspartymanager.exception.EventAlreadyAssessedException;
 import com.gladysz.kidspartymanager.exception.EventAssessmentNotFoundException;
 import com.gladysz.kidspartymanager.mapper.EventAssessmentMapper;
@@ -57,13 +58,25 @@ public class EventAssessmentService {
     }
 
 
-    public EventAssessment updateByReservationId(
+    public EventAssessment updatePatchByReservationId(
             final Long reservationId,
-            final EventAssessmentUpdateDto eventAssessmentUpdateDto) {
+            final EventAssessmentPatchDto eventAssessmentPatchDto) {
 
         EventAssessment fetchedAssessment = getByReservationId(reservationId);
 
-        eventAssessmentMapper.applyUpdate(fetchedAssessment, eventAssessmentUpdateDto);
+        eventAssessmentMapper.applyUpdatePatch(fetchedAssessment, eventAssessmentPatchDto);
+
+        return fetchedAssessment;
+    }
+
+
+    public EventAssessment updatePutByReservationId(
+            final Long reservationId,
+            final EventAssessmentPutDto eventAssessmentPutDto) {
+
+        EventAssessment fetchedAssessment = getByReservationId(reservationId);
+
+        eventAssessmentMapper.applyUpdatePut(fetchedAssessment, eventAssessmentPutDto);
 
         return fetchedAssessment;
     }
