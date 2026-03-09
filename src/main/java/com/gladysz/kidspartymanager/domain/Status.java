@@ -1,5 +1,5 @@
 package com.gladysz.kidspartymanager.domain;
 
 public enum Status {
-    NEW, CONFIRMED, CANCELLED
+    NEW, CONFIRMED, CANCELLED, COMPLETED
 }

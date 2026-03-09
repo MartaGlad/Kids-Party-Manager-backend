@@ -5,12 +5,14 @@ import com.gladysz.kidspartymanager.domain.*;
 import com.gladysz.kidspartymanager.dto.ReservationCreateDto;
 import com.gladysz.kidspartymanager.dto.ReservationUpdateDto;
 import com.gladysz.kidspartymanager.exception.ReservationNotFoundException;
+import com.gladysz.kidspartymanager.exception.ReservationOverlapException;
 import com.gladysz.kidspartymanager.mapper.ReservationMapper;
 import com.gladysz.kidspartymanager.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,12 +27,37 @@ public class ReservationService {
     private final OrdererService ordererService;
 
 
+    private void validateReservationOverlap(
+            final LocalDateTime newReservationStart,
+            final EventPackage eventPackage,
+            final Long excludedReservationId) {
+
+        LocalDateTime newReservationEnd = newReservationStart
+                .plusHours(eventPackage.getDurationHr())
+                .plusMinutes(Reservation.CLEANUP_TIME_MINUTES);
+
+        List<Reservation> reservationsExisting = reservationRepository.findAll();
+
+        for (Reservation reservation : reservationsExisting) {
+            if (!reservation.isActive() || reservation.getId().equals(excludedReservationId)) {
+                continue;
+            }
+            
+            if (reservation.overlaps(newReservationStart, newReservationEnd)) {
+                throw new ReservationOverlapException();
+            }
+        }
+    }
+
+
     public Reservation createNewReservation(final ReservationCreateDto reservationCreateDto) {
 
         Reservation reservation = new Reservation();
 
         EventPackage eventPackage = eventPackageService
                 .getEventPackageById(reservationCreateDto.eventPackageId());
+
+        validateReservationOverlap(reservationCreateDto.eventDateTime(), eventPackage, null);
 
         Animator animator = animatorService
                 .getAnimatorById(reservationCreateDto.animatorId());
@@ -65,10 +92,22 @@ public class ReservationService {
     }
 
 
-    public Reservation updateReservation(final Long id, final ReservationUpdateDto reservationUpdateDto) {
+    public Reservation updateReservation(
+            final Long id,
+            final ReservationUpdateDto reservationUpdateDto) {
 
         Reservation fetchedReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ReservationNotFoundException(id));
+
+        LocalDateTime newReservationStart = reservationUpdateDto.eventDateTime() != null
+                ? reservationUpdateDto.eventDateTime() :
+                fetchedReservation.getEventDateTime();
+
+        validateReservationOverlap(
+                newReservationStart,
+                fetchedReservation.getEventPackage(),
+                id
+        );
 
         reservationMapper.applyUpdate(fetchedReservation, reservationUpdateDto);
 

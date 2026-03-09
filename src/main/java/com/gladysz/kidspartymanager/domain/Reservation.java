@@ -70,7 +70,7 @@ public class Reservation {
 
     @Setter
     @NotNull
-    @DecimalMin("500")
+    @DecimalMin("500.00")
     @Column(name = "price_snapshot", nullable = false, precision = 10, scale = 2)
     private BigDecimal priceSnapshot;
 
@@ -85,6 +85,9 @@ public class Reservation {
     private EventAssessment eventAssessment;
 
 
+    public final static long CLEANUP_TIME_MINUTES = 30;
+
+
     @Override
     public boolean equals(Object o) {
 
@@ -94,6 +97,7 @@ public class Reservation {
         return this.id != null && this.id.equals(reservation.id);
     }
 
+
     @Override
     public int hashCode() {
 
@@ -102,6 +106,7 @@ public class Reservation {
 
 
     public void setEventAssessment(EventAssessment eventAssessment) {
+
         this.eventAssessment = eventAssessment;
 
         if (eventAssessment != null && eventAssessment.getReservation() != this) {
@@ -114,8 +119,8 @@ public class Reservation {
 
         return switch (this.status) {
             case NEW -> newStatus == Status.CONFIRMED || newStatus == Status.CANCELLED;
-            case CONFIRMED -> newStatus == Status.CANCELLED;
-            case CANCELLED -> false;
+            case CONFIRMED -> newStatus == Status.CANCELLED || newStatus == Status.COMPLETED;
+            case CANCELLED, COMPLETED -> false;
         };
     }
 
@@ -133,6 +138,12 @@ public class Reservation {
     }
 
 
+    public boolean isActive() {
+
+        return status == Status.NEW || status == Status.CONFIRMED;
+    }
+
+
     @PrePersist
     void prePersist() {
 
@@ -143,5 +154,19 @@ public class Reservation {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now();
         }
+    }
+
+
+    public LocalDateTime getEventEndTimeWithCleanup() {
+
+        return eventDateTime
+                .plusHours(eventPackage.getDurationHr())
+                .plusMinutes(CLEANUP_TIME_MINUTES);
+    }
+
+
+    public boolean overlaps(LocalDateTime newReservationStart, LocalDateTime newReservationEnd) {
+        return newReservationStart.isBefore(getEventEndTimeWithCleanup())
+                && newReservationEnd.isAfter(eventDateTime);
     }
 }
