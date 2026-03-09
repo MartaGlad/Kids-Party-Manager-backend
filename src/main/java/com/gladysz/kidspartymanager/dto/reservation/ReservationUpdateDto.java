@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.dto;
+package com.gladysz.kidspartymanager.dto.reservation;
 
 import jakarta.validation.constraints.Min;
 

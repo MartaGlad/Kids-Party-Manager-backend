@@ -2,9 +2,9 @@ package com.gladysz.kidspartymanager.mapper;
 
 
 import com.gladysz.kidspartymanager.domain.Orderer;
-import com.gladysz.kidspartymanager.dto.OrdererCreateDto;
-import com.gladysz.kidspartymanager.dto.OrdererResponseDto;
-import com.gladysz.kidspartymanager.dto.OrdererUpdateDto;
+import com.gladysz.kidspartymanager.dto.orderer.OrdererCreateDto;
+import com.gladysz.kidspartymanager.dto.orderer.OrdererResponseDto;
+import com.gladysz.kidspartymanager.dto.orderer.OrdererUpdateDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

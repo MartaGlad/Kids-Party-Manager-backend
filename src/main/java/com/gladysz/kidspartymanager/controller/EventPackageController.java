@@ -2,10 +2,10 @@ package com.gladysz.kidspartymanager.controller;
 
 
 import com.gladysz.kidspartymanager.domain.EventPackage;
-import com.gladysz.kidspartymanager.dto.EventPackageCreateDto;
-import com.gladysz.kidspartymanager.dto.EventPackagePutDto;
-import com.gladysz.kidspartymanager.dto.EventPackageResponseDto;
-import com.gladysz.kidspartymanager.dto.EventPackagePatchDto;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackageCreateDto;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackagePutDto;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackageResponseDto;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackagePatchDto;
 import com.gladysz.kidspartymanager.mapper.EventPackageMapper;
 import com.gladysz.kidspartymanager.service.EventPackageService;
 import jakarta.validation.Valid;

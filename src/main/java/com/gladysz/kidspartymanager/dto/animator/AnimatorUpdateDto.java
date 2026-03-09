@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.dto;
+package com.gladysz.kidspartymanager.dto.animator;
 
 import jakarta.validation.constraints.Email;
 

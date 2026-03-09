@@ -1,8 +1,8 @@
 package com.gladysz.kidspartymanager.service;
 
 import com.gladysz.kidspartymanager.domain.EventPackage;
-import com.gladysz.kidspartymanager.dto.EventPackagePatchDto;
-import com.gladysz.kidspartymanager.dto.EventPackagePutDto;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackagePatchDto;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackagePutDto;
 import com.gladysz.kidspartymanager.exception.EventPackageNotFoundException;
 import com.gladysz.kidspartymanager.mapper.EventPackageMapper;
 import com.gladysz.kidspartymanager.repository.EventPackageRepository;

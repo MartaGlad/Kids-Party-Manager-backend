@@ -1,7 +1,10 @@
 package com.gladysz.kidspartymanager.mapper;
 
 import com.gladysz.kidspartymanager.domain.EventPackage;
-import com.gladysz.kidspartymanager.dto.*;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackageCreateDto;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackagePatchDto;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackagePutDto;
+import com.gladysz.kidspartymanager.dto.eventpackage.EventPackageResponseDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

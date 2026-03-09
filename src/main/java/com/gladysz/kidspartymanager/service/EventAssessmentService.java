@@ -2,9 +2,9 @@ package com.gladysz.kidspartymanager.service;
 
 import com.gladysz.kidspartymanager.domain.*;
 
-import com.gladysz.kidspartymanager.dto.EventAssessmentCreateDto;
-import com.gladysz.kidspartymanager.dto.EventAssessmentPatchDto;
-import com.gladysz.kidspartymanager.dto.EventAssessmentPutDto;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentCreateDto;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPatchDto;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPutDto;
 import com.gladysz.kidspartymanager.exception.EventAlreadyAssessedException;
 import com.gladysz.kidspartymanager.exception.EventAssessmentNotFoundException;
 import com.gladysz.kidspartymanager.mapper.EventAssessmentMapper;

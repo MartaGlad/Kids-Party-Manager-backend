@@ -1,10 +1,10 @@
 package com.gladysz.kidspartymanager.controller;
 
 import com.gladysz.kidspartymanager.domain.Reservation;
-import com.gladysz.kidspartymanager.dto.ReservationChangeStatusDto;
-import com.gladysz.kidspartymanager.dto.ReservationCreateDto;
-import com.gladysz.kidspartymanager.dto.ReservationResponseDto;
-import com.gladysz.kidspartymanager.dto.ReservationUpdateDto;
+import com.gladysz.kidspartymanager.dto.reservation.ReservationChangeStatusDto;
+import com.gladysz.kidspartymanager.dto.reservation.ReservationCreateDto;
+import com.gladysz.kidspartymanager.dto.reservation.ReservationResponseDto;
+import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
 import com.gladysz.kidspartymanager.mapper.ReservationMapper;
 import com.gladysz.kidspartymanager.service.ReservationService;
 import jakarta.validation.Valid;

@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.dto;
+package com.gladysz.kidspartymanager.dto.eventpackage;
 
 import java.math.BigDecimal;
 

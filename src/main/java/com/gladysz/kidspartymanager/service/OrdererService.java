@@ -2,7 +2,7 @@ package com.gladysz.kidspartymanager.service;
 
 
 import com.gladysz.kidspartymanager.domain.Orderer;
-import com.gladysz.kidspartymanager.dto.OrdererUpdateDto;
+import com.gladysz.kidspartymanager.dto.orderer.OrdererUpdateDto;
 import com.gladysz.kidspartymanager.exception.OrdererNotFoundException;
 import com.gladysz.kidspartymanager.mapper.OrdererMapper;
 import com.gladysz.kidspartymanager.repository.OrdererRepository;

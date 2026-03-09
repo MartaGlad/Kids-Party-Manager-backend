@@ -2,8 +2,8 @@ package com.gladysz.kidspartymanager.service;
 
 
 import com.gladysz.kidspartymanager.domain.*;
-import com.gladysz.kidspartymanager.dto.ReservationCreateDto;
-import com.gladysz.kidspartymanager.dto.ReservationUpdateDto;
+import com.gladysz.kidspartymanager.dto.reservation.ReservationCreateDto;
+import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
 import com.gladysz.kidspartymanager.exception.ReservationNotFoundException;
 import com.gladysz.kidspartymanager.exception.ReservationOverlapException;
 import com.gladysz.kidspartymanager.mapper.ReservationMapper;

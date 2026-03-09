@@ -2,9 +2,9 @@ package com.gladysz.kidspartymanager.mapper;
 
 import com.gladysz.kidspartymanager.domain.EventAssessment;
 
-import com.gladysz.kidspartymanager.dto.EventAssessmentPatchDto;
-import com.gladysz.kidspartymanager.dto.EventAssessmentPutDto;
-import com.gladysz.kidspartymanager.dto.EventAssessmentResponseDto;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPatchDto;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPutDto;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentResponseDto;
 
 import org.springframework.stereotype.Component;
 

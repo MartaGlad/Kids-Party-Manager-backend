@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.dto;
+package com.gladysz.kidspartymanager.dto.reservation;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

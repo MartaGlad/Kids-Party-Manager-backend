@@ -1,9 +1,9 @@
 package com.gladysz.kidspartymanager.controller;
 
 import com.gladysz.kidspartymanager.domain.Orderer;
-import com.gladysz.kidspartymanager.dto.OrdererCreateDto;
-import com.gladysz.kidspartymanager.dto.OrdererResponseDto;
-import com.gladysz.kidspartymanager.dto.OrdererUpdateDto;
+import com.gladysz.kidspartymanager.dto.orderer.OrdererCreateDto;
+import com.gladysz.kidspartymanager.dto.orderer.OrdererResponseDto;
+import com.gladysz.kidspartymanager.dto.orderer.OrdererUpdateDto;
 import com.gladysz.kidspartymanager.mapper.OrdererMapper;
 import com.gladysz.kidspartymanager.service.OrdererService;
 import jakarta.validation.Valid;

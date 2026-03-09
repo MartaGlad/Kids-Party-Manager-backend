@@ -1,7 +1,10 @@
 package com.gladysz.kidspartymanager.controller;
 
 import com.gladysz.kidspartymanager.domain.EventAssessment;
-import com.gladysz.kidspartymanager.dto.*;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentCreateDto;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPatchDto;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPutDto;
+import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentResponseDto;
 import com.gladysz.kidspartymanager.mapper.EventAssessmentMapper;
 import com.gladysz.kidspartymanager.service.EventAssessmentService;
 import jakarta.validation.Valid;

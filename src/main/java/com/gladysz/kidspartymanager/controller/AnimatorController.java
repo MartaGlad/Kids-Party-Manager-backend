@@ -1,9 +1,9 @@
 package com.gladysz.kidspartymanager.controller;
 
 import com.gladysz.kidspartymanager.domain.Animator;
-import com.gladysz.kidspartymanager.dto.AnimatorCreateDto;
-import com.gladysz.kidspartymanager.dto.AnimatorResponseDto;
-import com.gladysz.kidspartymanager.dto.AnimatorUpdateDto;
+import com.gladysz.kidspartymanager.dto.animator.AnimatorCreateDto;
+import com.gladysz.kidspartymanager.dto.animator.AnimatorResponseDto;
+import com.gladysz.kidspartymanager.dto.animator.AnimatorUpdateDto;
 import com.gladysz.kidspartymanager.mapper.AnimatorMapper;
 import com.gladysz.kidspartymanager.service.AnimatorService;
 import jakarta.validation.Valid;

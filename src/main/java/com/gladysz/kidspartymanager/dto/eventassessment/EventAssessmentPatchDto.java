@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.dto;
+package com.gladysz.kidspartymanager.dto.eventassessment;
 
 import jakarta.validation.constraints.*;
 

@@ -1,7 +1,7 @@
 package com.gladysz.kidspartymanager.service;
 
 import com.gladysz.kidspartymanager.domain.Animator;
-import com.gladysz.kidspartymanager.dto.AnimatorUpdateDto;
+import com.gladysz.kidspartymanager.dto.animator.AnimatorUpdateDto;
 import com.gladysz.kidspartymanager.exception.AnimatorNotFoundException;
 import com.gladysz.kidspartymanager.mapper.AnimatorMapper;
 import com.gladysz.kidspartymanager.repository.AnimatorRepository;

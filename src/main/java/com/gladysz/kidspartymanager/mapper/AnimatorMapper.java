@@ -1,9 +1,9 @@
 package com.gladysz.kidspartymanager.mapper;
 
 import com.gladysz.kidspartymanager.domain.Animator;
-import com.gladysz.kidspartymanager.dto.AnimatorCreateDto;
-import com.gladysz.kidspartymanager.dto.AnimatorResponseDto;
-import com.gladysz.kidspartymanager.dto.AnimatorUpdateDto;
+import com.gladysz.kidspartymanager.dto.animator.AnimatorCreateDto;
+import com.gladysz.kidspartymanager.dto.animator.AnimatorResponseDto;
+import com.gladysz.kidspartymanager.dto.animator.AnimatorUpdateDto;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

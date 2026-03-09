@@ -1,8 +1,8 @@
 package com.gladysz.kidspartymanager.mapper;
 
 import com.gladysz.kidspartymanager.domain.Reservation;
-import com.gladysz.kidspartymanager.dto.ReservationResponseDto;
-import com.gladysz.kidspartymanager.dto.ReservationUpdateDto;
+import com.gladysz.kidspartymanager.dto.reservation.ReservationResponseDto;
+import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
 
 import org.springframework.stereotype.Component;
 
