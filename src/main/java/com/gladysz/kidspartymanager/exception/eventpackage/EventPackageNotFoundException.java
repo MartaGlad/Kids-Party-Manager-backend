@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.exception;
+package com.gladysz.kidspartymanager.exception.eventpackage;
 
 public class EventPackageNotFoundException extends RuntimeException {
 

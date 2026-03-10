@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.exception;
+package com.gladysz.kidspartymanager.exception.orderer;
 
 public class OrdererNotFoundException extends RuntimeException {
 

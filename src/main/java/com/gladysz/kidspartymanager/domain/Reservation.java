@@ -1,10 +1,10 @@
 package com.gladysz.kidspartymanager.domain;
 
-import com.gladysz.kidspartymanager.exception.ReservationChangeStatusException;
+import com.gladysz.kidspartymanager.exception.reservation.ReservationChangeStatusException;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,7 +70,7 @@ public class Reservation {
 
     @Setter
     @NotNull
-    @DecimalMin("500.00")
+    @Positive
     @Column(name = "price_snapshot", nullable = false, precision = 10, scale = 2)
     private BigDecimal priceSnapshot;
 

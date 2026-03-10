@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.exception;
+package com.gladysz.kidspartymanager.exception.animator;
 
 public class AnimatorNotFoundException extends RuntimeException {
 

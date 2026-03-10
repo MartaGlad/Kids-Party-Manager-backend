@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.exception;
+package com.gladysz.kidspartymanager.exception.reservation;
 
 public class ReservationNotFoundException extends RuntimeException {
 
