@@ -50,6 +50,12 @@ public class Reservation {
 
 
     @Setter
+    @NotNull
+    @Column(name = "holiday_flag", nullable = false)
+    private boolean holidayFlag;
+
+
+    @Setter
     @Min(1)
     @Column(name = "children_count", nullable = false)
     private int childrenCount;
