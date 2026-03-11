@@ -169,4 +169,22 @@ public class Reservation {
         return newReservationStart.isBefore(getEventEndTimeWithCleanup())
                 && newReservationEnd.isAfter(eventDateTime);
     }
+
+
+    public boolean isFinished(LocalDateTime currentTime) {
+
+        return !getEventEndTimeWithCleanup().isAfter(currentTime);
+    }
+
+
+    public boolean shouldBeCompleted(LocalDateTime currentTime) {
+
+        return status == Status.CONFIRMED && isFinished(currentTime);
+    }
+
+
+    public boolean shouldBeCancelled(LocalDateTime currentTime) {
+
+        return status == Status.NEW && !createdAt.plusHours(48).isAfter(currentTime);
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -36,10 +37,10 @@ public class ReservationService {
                 .plusHours(eventPackage.getDurationHr())
                 .plusMinutes(Reservation.CLEANUP_TIME_MINUTES);
 
-        List<Reservation> reservationsExisting = reservationRepository.findAll();
+        List<Reservation> activeReservations = reservationRepository.findActiveReservations();
 
-        for (Reservation reservation : reservationsExisting) {
-            if (!reservation.isActive() || reservation.getId().equals(excludedReservationId)) {
+        for (Reservation reservation : activeReservations) {
+            if (Objects.equals(reservation.getId(), excludedReservationId)) {
                 continue;
             }
             
@@ -132,6 +133,36 @@ public class ReservationService {
         reservation.changeStatus(newStatus);
 
         return reservation;
+    }
+
+
+    public void cancelExpiredReservations() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        List<Reservation> reservationsToCancel = reservationRepository
+                .findExpiredNewReservations(now.minusHours(48));
+
+        for (Reservation r : reservationsToCancel) {
+            if (r.shouldBeCancelled(now)) {
+                r.changeStatus(Status.CANCELLED);
+            }
+        }
+    }
+
+
+    public void completeFinishedReservations() {
+
+        LocalDateTime now = LocalDateTime.now();
+
+        List<Reservation> reservationsToComplete = reservationRepository
+                .findConfirmedReservationsStartedBefore(now);
+
+        for (Reservation r : reservationsToComplete) {
+            if (r.shouldBeCompleted(now)) {
+                r.changeStatus(Status.COMPLETED);
+            }
+        }
     }
 }
 
