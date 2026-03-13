@@ -4,7 +4,7 @@ import com.gladysz.kidspartymanager.domain.CurrencyRate;
 import com.gladysz.kidspartymanager.dto.currencyrate.CurrencyDataDto;
 import com.gladysz.kidspartymanager.exception.currencyrate.CurrencyRateNotFoundException;
 import com.gladysz.kidspartymanager.repository.CurrencyRateRepository;
-import com.gladysz.kidspartymanager.service.integration.ExchangeRateProvider;
+import com.gladysz.kidspartymanager.service.integration.exchangerate.ExchangeRateProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

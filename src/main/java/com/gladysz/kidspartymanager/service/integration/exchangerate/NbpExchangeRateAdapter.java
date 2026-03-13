@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.service.integration;
+package com.gladysz.kidspartymanager.service.integration.exchangerate;
 
 
 import com.gladysz.kidspartymanager.dto.currencyrate.CurrencyDataDto;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class NbpExchangeRateAdapter implements ExchangeRateProvider {
 
     private final RestClient restClient;
+
 
     @Override
     public CurrencyDataDto getCurrentCurrencyData() {

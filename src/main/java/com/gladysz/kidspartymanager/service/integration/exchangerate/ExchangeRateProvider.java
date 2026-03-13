@@ -1,4 +1,4 @@
-package com.gladysz.kidspartymanager.service.integration;
+package com.gladysz.kidspartymanager.service.integration.exchangerate;
 
 import com.gladysz.kidspartymanager.dto.currencyrate.CurrencyDataDto;
 
