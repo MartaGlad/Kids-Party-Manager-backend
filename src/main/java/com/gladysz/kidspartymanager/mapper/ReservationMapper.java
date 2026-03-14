@@ -6,6 +6,8 @@ import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
 
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +40,10 @@ public class ReservationMapper {
                 reservation.getAnimator().getId(),
                 reservation.getOrderer().getId(),
                 reservation.getEventDateTime(),
+                reservation.isHolidayFlag(),
                 reservation.getChildrenCount(),
                 reservation.getBirthdayChildAge(),
+                reservation.getStatus(),
                 reservation.getPriceSnapshot(),
                 reservation.getCreatedAt()
         );
