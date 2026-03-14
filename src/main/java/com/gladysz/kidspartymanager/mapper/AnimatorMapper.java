@@ -48,6 +48,7 @@ public class AnimatorMapper {
                 animatorCreateDto.lastName(),
                 animatorCreateDto.email().trim().toLowerCase(),
                 animatorCreateDto.phone().trim(),
+                true,
                 new ArrayList<>()
         );
     }
@@ -60,7 +61,8 @@ public class AnimatorMapper {
                 animator.getFirstName(),
                 animator.getLastName(),
                 animator.getEmail(),
-                animator.getPhone()
+                animator.getPhone(),
+                animator.isActive()
         );
     }
 

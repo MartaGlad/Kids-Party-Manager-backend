@@ -5,6 +5,7 @@ import com.gladysz.kidspartymanager.domain.*;
 import com.gladysz.kidspartymanager.domain.pricing.PricingResult;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationCreateDto;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
+import com.gladysz.kidspartymanager.exception.animator.AnimatorInactiveException;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationNotFoundException;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationOverlapException;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationUpdateException;
@@ -65,6 +66,10 @@ public class ReservationService {
 
         Animator animator = animatorService
                 .getAnimatorById(reservationCreateDto.animatorId());
+
+        if (!animator.isActive()) {
+            throw new AnimatorInactiveException(animator.getId());
+        }
 
         Orderer orderer = ordererService
                 .getOrdererById(reservationCreateDto.ordererId());

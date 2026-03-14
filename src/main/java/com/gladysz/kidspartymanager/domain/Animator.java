@@ -49,6 +49,11 @@ public class Animator {
     private String phone;
 
 
+    @Setter
+    @Column(name = "active", nullable = false)
+    private boolean active = true;
+
+
     @OneToMany(mappedBy = "animator", fetch = FetchType.LAZY)
     private List<Reservation> reservations = new ArrayList<>();
 

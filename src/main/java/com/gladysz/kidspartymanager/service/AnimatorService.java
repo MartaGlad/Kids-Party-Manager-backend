@@ -3,6 +3,7 @@ package com.gladysz.kidspartymanager.service;
 import com.gladysz.kidspartymanager.domain.Animator;
 import com.gladysz.kidspartymanager.dto.animator.AnimatorUpdateDto;
 import com.gladysz.kidspartymanager.exception.animator.AnimatorDeleteException;
+import com.gladysz.kidspartymanager.exception.animator.AnimatorInactiveException;
 import com.gladysz.kidspartymanager.exception.animator.AnimatorNotFoundException;
 import com.gladysz.kidspartymanager.mapper.AnimatorMapper;
 import com.gladysz.kidspartymanager.repository.AnimatorRepository;
@@ -50,6 +51,20 @@ public class AnimatorService {
                 .orElseThrow(() -> new AnimatorNotFoundException(id));
 
         animatorMapper.applyUpdate(fetchedAnimator, animatorUpdateDto);
+
+        return fetchedAnimator;
+    }
+
+
+    public Animator deactivateAnimatorById(final Long id) {
+
+        Animator fetchedAnimator = animatorRepository.findById(id)
+                .orElseThrow(() -> new AnimatorNotFoundException(id));
+
+        if (!fetchedAnimator.isActive()) {
+            throw new AnimatorInactiveException(id);
+        }
+        fetchedAnimator.setActive(false);
 
         return fetchedAnimator;
     }
