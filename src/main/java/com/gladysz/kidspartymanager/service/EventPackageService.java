@@ -3,9 +3,11 @@ package com.gladysz.kidspartymanager.service;
 import com.gladysz.kidspartymanager.domain.EventPackage;
 import com.gladysz.kidspartymanager.dto.eventpackage.EventPackagePatchDto;
 import com.gladysz.kidspartymanager.dto.eventpackage.EventPackagePutDto;
+import com.gladysz.kidspartymanager.exception.eventpackage.EventPackageDeleteException;
 import com.gladysz.kidspartymanager.exception.eventpackage.EventPackageNotFoundException;
 import com.gladysz.kidspartymanager.mapper.EventPackageMapper;
 import com.gladysz.kidspartymanager.repository.EventPackageRepository;
+import com.gladysz.kidspartymanager.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ public class EventPackageService {
 
     private final EventPackageRepository eventPackageRepository;
     private final EventPackageMapper eventPackageMapper;
+    private final ReservationRepository reservationRepository;
 
 
     public EventPackage createEventPackage(final EventPackage eventPackage) {
@@ -66,6 +69,9 @@ public class EventPackageService {
 
         EventPackage fetchedEventPackage = getEventPackageById(id);
 
+        if (reservationRepository.existsByEventPackageId(fetchedEventPackage.getId())) {
+            throw new EventPackageDeleteException(id);
+        }
         eventPackageRepository.delete(fetchedEventPackage);
     }
 }

@@ -82,14 +82,4 @@ public class ReservationController {
         return ResponseEntity
                 .ok(reservationMapper.mapToReservationResponseDto(reservationUpdated));
     }
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
-
-        reservationService.deleteReservationById(id);
-
-        return ResponseEntity
-                .noContent().build();
-    }
 }

@@ -3,9 +3,11 @@ package com.gladysz.kidspartymanager.service;
 
 import com.gladysz.kidspartymanager.domain.Orderer;
 import com.gladysz.kidspartymanager.dto.orderer.OrdererUpdateDto;
+import com.gladysz.kidspartymanager.exception.orderer.OrdererDeleteException;
 import com.gladysz.kidspartymanager.exception.orderer.OrdererNotFoundException;
 import com.gladysz.kidspartymanager.mapper.OrdererMapper;
 import com.gladysz.kidspartymanager.repository.OrdererRepository;
+import com.gladysz.kidspartymanager.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ public class OrdererService {
 
     private final OrdererRepository ordererRepository;
     private final OrdererMapper ordererMapper;
+    private final ReservationRepository reservationRepository;
 
 
     public Orderer createOrderer(final Orderer orderer) {
@@ -58,6 +61,9 @@ public class OrdererService {
         Orderer fetchedOrderer = ordererRepository.findById(id)
                 .orElseThrow(() -> new OrdererNotFoundException(id));
 
+        if (reservationRepository.existsByOrdererId(fetchedOrderer.getId())) {
+            throw new OrdererDeleteException(id);
+        }
         ordererRepository.delete(fetchedOrderer);
     }
 }

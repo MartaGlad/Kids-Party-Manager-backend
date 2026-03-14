@@ -1,5 +1,6 @@
 package com.gladysz.kidspartymanager.repository;
 
+import com.gladysz.kidspartymanager.domain.EventPackage;
 import com.gladysz.kidspartymanager.domain.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -35,4 +36,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     )
     List<Reservation> findConfirmedReservationsStartedBefore(@Param("now") LocalDateTime now);
 
+
+    boolean existsByEventPackageId(Long eventId);
+
+    boolean existsByAnimatorId(Long animatorId);
+
+    boolean existsByOrdererId(Long ordererId);
 }

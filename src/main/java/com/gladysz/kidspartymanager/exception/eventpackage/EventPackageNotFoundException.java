@@ -4,7 +4,7 @@ public class EventPackageNotFoundException extends RuntimeException {
 
     public EventPackageNotFoundException(Long id) {
 
-        super("EventPackage with id " + id + " not found.");
+        super("Event package with id " + id + " not found.");
     }
 }
 

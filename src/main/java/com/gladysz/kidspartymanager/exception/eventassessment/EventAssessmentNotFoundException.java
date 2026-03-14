@@ -4,7 +4,7 @@ public class EventAssessmentNotFoundException extends RuntimeException {
 
     public EventAssessmentNotFoundException(Long reservationId) {
 
-        super("EventAssessment for reservation with id " + reservationId + " not found.");
+        super("Event assessment for reservation with id " + reservationId + " not found.");
     }
 
 }

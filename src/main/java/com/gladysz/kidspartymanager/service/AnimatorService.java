@@ -2,9 +2,11 @@ package com.gladysz.kidspartymanager.service;
 
 import com.gladysz.kidspartymanager.domain.Animator;
 import com.gladysz.kidspartymanager.dto.animator.AnimatorUpdateDto;
+import com.gladysz.kidspartymanager.exception.animator.AnimatorDeleteException;
 import com.gladysz.kidspartymanager.exception.animator.AnimatorNotFoundException;
 import com.gladysz.kidspartymanager.mapper.AnimatorMapper;
 import com.gladysz.kidspartymanager.repository.AnimatorRepository;
+import com.gladysz.kidspartymanager.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ public class AnimatorService {
 
     private final AnimatorRepository animatorRepository;
     private final AnimatorMapper animatorMapper;
+    private final ReservationRepository reservationRepository;
 
 
     public Animator createAnimator(final Animator animator) {
@@ -57,6 +60,9 @@ public class AnimatorService {
         Animator fetchedAnimator = animatorRepository.findById(id)
                 .orElseThrow(() -> new AnimatorNotFoundException(id));
 
+        if (reservationRepository.existsByAnimatorId(fetchedAnimator.getId())) {
+            throw new AnimatorDeleteException(id);
+        }
         animatorRepository.delete(fetchedAnimator);
     }
 }
