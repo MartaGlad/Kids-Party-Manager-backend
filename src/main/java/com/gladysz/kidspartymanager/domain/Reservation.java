@@ -144,6 +144,12 @@ public class Reservation {
     }
 
 
+    public boolean canBeUpdated() {
+
+        return this.status == Status.NEW || this.status == Status.CONFIRMED;
+    }
+
+
     public boolean isActive() {
 
         return status == Status.NEW || status == Status.CONFIRMED;

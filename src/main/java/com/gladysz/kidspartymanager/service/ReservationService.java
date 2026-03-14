@@ -2,10 +2,12 @@ package com.gladysz.kidspartymanager.service;
 
 
 import com.gladysz.kidspartymanager.domain.*;
+import com.gladysz.kidspartymanager.domain.pricing.PricingResult;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationCreateDto;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationNotFoundException;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationOverlapException;
+import com.gladysz.kidspartymanager.exception.reservation.ReservationUpdateException;
 import com.gladysz.kidspartymanager.mapper.ReservationMapper;
 import com.gladysz.kidspartymanager.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class ReservationService {
     private final EventPackageService eventPackageService;
     private final AnimatorService animatorService;
     private final OrdererService ordererService;
+    private final PricingService pricingService;
 
 
     private void validateReservationOverlap(
@@ -66,13 +69,19 @@ public class ReservationService {
         Orderer orderer = ordererService
                 .getOrdererById(reservationCreateDto.ordererId());
 
+        PricingResult pricingResult = pricingService.getPricingResult(
+                eventPackage,
+                reservationCreateDto.childrenCount(),
+                reservationCreateDto.eventDateTime().toLocalDate());
+
         reservation.setEventPackage(eventPackage);
         reservation.setAnimator(animator);
         reservation.setOrderer(orderer);
         reservation.setEventDateTime(reservationCreateDto.eventDateTime());
         reservation.setChildrenCount(reservationCreateDto.childrenCount());
         reservation.setBirthdayChildAge(reservationCreateDto.birthdayChildAge());
-        reservation.setPriceSnapshot(eventPackage.getBasePrice());
+        reservation.setHolidayFlag(pricingResult.holiday());
+        reservation.setPriceSnapshot(pricingResult.finalPricePln());
 
         return reservationRepository.save(reservation);
     }
@@ -97,20 +106,37 @@ public class ReservationService {
             final Long id,
             final ReservationUpdateDto reservationUpdateDto) {
 
+
         Reservation fetchedReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ReservationNotFoundException(id));
 
-        LocalDateTime newReservationStart = reservationUpdateDto.eventDateTime() != null
-                ? reservationUpdateDto.eventDateTime() :
-                fetchedReservation.getEventDateTime();
+        if (!fetchedReservation.canBeUpdated()) {
+            throw new ReservationUpdateException();
+        }
 
-        validateReservationOverlap(
-                newReservationStart,
-                fetchedReservation.getEventPackage(),
-                id
-        );
+        EventPackage newEventPackage = reservationUpdateDto.eventPackageId() != null
+                ? eventPackageService.getEventPackageById(reservationUpdateDto.eventPackageId())
+                : fetchedReservation.getEventPackage();
+
+        LocalDateTime newReservationStart = reservationUpdateDto.eventDateTime() != null
+                ? reservationUpdateDto.eventDateTime()
+                : fetchedReservation.getEventDateTime();
+
+        validateReservationOverlap(newReservationStart, newEventPackage, id);
+
+        if (reservationUpdateDto.eventPackageId() != null) {
+            fetchedReservation.setEventPackage(newEventPackage);
+        }
 
         reservationMapper.applyUpdate(fetchedReservation, reservationUpdateDto);
+
+        PricingResult pricingResult = pricingService.getPricingResult(
+                fetchedReservation.getEventPackage(),
+                fetchedReservation.getChildrenCount(),
+                fetchedReservation.getEventDateTime().toLocalDate());
+
+        fetchedReservation.setHolidayFlag(pricingResult.holiday());
+        fetchedReservation.setPriceSnapshot(pricingResult.finalPricePln());
 
         return fetchedReservation;
     }
