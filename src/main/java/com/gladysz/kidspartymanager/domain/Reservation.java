@@ -50,7 +50,6 @@ public class Reservation {
 
 
     @Setter
-    @NotNull
     @Column(name = "holiday_flag", nullable = false)
     private boolean holidayFlag;
 
@@ -147,6 +146,18 @@ public class Reservation {
     public boolean canBeUpdated() {
 
         return this.status == Status.NEW || this.status == Status.CONFIRMED;
+    }
+
+
+    public boolean isCompleted() {
+
+        return this.status == Status.COMPLETED;
+    }
+
+
+    public boolean hasAssessment() {
+
+        return this.eventAssessment != null;
     }
 
 

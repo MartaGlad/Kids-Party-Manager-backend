@@ -67,6 +67,7 @@ public class AnimatorController {
                 .ok(animatorMapper.mapToAnimatorResponseDto(animatorUpdated));
     }
 
+
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<AnimatorResponseDto> deactivateAnimator(@PathVariable Long id) {
 

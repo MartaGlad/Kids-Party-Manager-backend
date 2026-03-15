@@ -75,5 +75,4 @@ public class EventAssessment {
             this.createdAt = LocalDateTime.now();
         }
     }
-
 }

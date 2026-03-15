@@ -6,6 +6,7 @@ import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentCreateDto
 import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPatchDto;
 import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPutDto;
 import com.gladysz.kidspartymanager.exception.eventassessment.EventAlreadyAssessedException;
+import com.gladysz.kidspartymanager.exception.eventassessment.EventAssessmentNotAllowedException;
 import com.gladysz.kidspartymanager.exception.eventassessment.EventAssessmentNotFoundException;
 import com.gladysz.kidspartymanager.mapper.EventAssessmentMapper;
 import com.gladysz.kidspartymanager.repository.EventAssessmentRepository;
@@ -32,8 +33,12 @@ public class EventAssessmentService {
         Reservation reservation = reservationService
                 .getReservationById(reservationId);
 
-        if (reservation.getEventAssessment() != null) {
+        if (reservation.hasAssessment()) {
             throw new EventAlreadyAssessedException(reservationId);
+        }
+
+        if (!reservation.isCompleted()) {
+            throw new EventAssessmentNotAllowedException(reservationId);
         }
 
         EventAssessment eventAssessment = new EventAssessment();
