@@ -42,14 +42,14 @@ public class OrdererMapper {
 
     public Orderer mapToOrderer(final OrdererCreateDto ordererCreateDto) {
 
-        return new Orderer (
-                null,
-                ordererCreateDto.firstName().trim(),
-                ordererCreateDto.lastName().trim(),
-                ordererCreateDto.email().trim().toLowerCase(),
-                ordererCreateDto.phone().trim(),
-                new ArrayList<>()
-        );
+        Orderer orderer = new Orderer();
+
+        orderer.setFirstName(ordererCreateDto.firstName().trim());
+        orderer.setLastName(ordererCreateDto.lastName().trim());
+        orderer.setEmail(ordererCreateDto.email().trim().toLowerCase());
+        orderer.setPhone(ordererCreateDto.phone().trim());
+
+        return orderer;
     }
 
 

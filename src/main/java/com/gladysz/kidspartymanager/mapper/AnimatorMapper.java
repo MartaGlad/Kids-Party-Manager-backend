@@ -42,15 +42,14 @@ public class AnimatorMapper {
 
     public Animator mapToAnimator(final AnimatorCreateDto animatorCreateDto) {
 
-        return new Animator (
-                null,
-                animatorCreateDto.firstName(),
-                animatorCreateDto.lastName(),
-                animatorCreateDto.email().trim().toLowerCase(),
-                animatorCreateDto.phone().trim(),
-                true,
-                new ArrayList<>()
-        );
+        Animator animator = new Animator();
+
+        animator.setFirstName(animatorCreateDto.firstName());
+        animator.setLastName(animatorCreateDto.lastName());
+        animator.setEmail(animatorCreateDto.email().trim().toLowerCase());
+        animator.setPhone(animatorCreateDto.phone().trim());
+
+        return animator;
     }
 
 

@@ -61,15 +61,15 @@ public class EventPackageMapper {
 
     public EventPackage mapToEventPackage(final EventPackageCreateDto eventPackageCreateDto) {
         
-        return new EventPackage (
-                null,
-                eventPackageCreateDto.name().trim(),
-                eventPackageCreateDto.description().trim(),
-                eventPackageCreateDto.basePrice(),
-                eventPackageCreateDto.maxChildrenCount(),
-                eventPackageCreateDto.durationHr(),
-                new ArrayList<>()
-        );
+        EventPackage eventPackage = new EventPackage();
+
+        eventPackage.setName(eventPackageCreateDto.name().trim());
+        eventPackage.setDescription(eventPackageCreateDto.description().trim());
+        eventPackage.setBasePrice(eventPackageCreateDto.basePrice());
+        eventPackage.setMaxChildrenCount(eventPackageCreateDto.maxChildrenCount());
+        eventPackage.setDurationHr(eventPackageCreateDto.durationHr());
+
+        return eventPackage;
     }
 
 
