@@ -1,12 +1,11 @@
 package com.gladysz.kidspartymanager.controller;
 
+import com.gladysz.kidspartymanager.domain.EventPackage;
 import com.gladysz.kidspartymanager.domain.Reservation;
 import com.gladysz.kidspartymanager.domain.Status;
-import com.gladysz.kidspartymanager.dto.reservation.ReservationChangeStatusDto;
-import com.gladysz.kidspartymanager.dto.reservation.ReservationCreateDto;
-import com.gladysz.kidspartymanager.dto.reservation.ReservationResponseDto;
-import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
+import com.gladysz.kidspartymanager.dto.reservation.*;
 import com.gladysz.kidspartymanager.mapper.ReservationMapper;
+import com.gladysz.kidspartymanager.service.EventPackageService;
 import com.gladysz.kidspartymanager.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,21 @@ public class ReservationController {
 
     private final ReservationService reservationService;
     private final ReservationMapper reservationMapper;
+    private final EventPackageService eventPackageService;
 
+
+    @PostMapping("/check-availability")
+    public ResponseEntity<Boolean> checkAvailability(
+            @Valid @RequestBody ReservationCheckAvailabilityDto reservationCheckAvailabilityDto) {
+
+        EventPackage eventPackage = eventPackageService
+                .getEventPackageById(reservationCheckAvailabilityDto.eventPackageId());
+
+        return ResponseEntity.ok(reservationService.isReservationTermAvailable(
+                reservationCheckAvailabilityDto.eventDateTime(),
+                eventPackage
+        ));
+    }
 
     @PostMapping
     public ResponseEntity<ReservationResponseDto> addReservation(

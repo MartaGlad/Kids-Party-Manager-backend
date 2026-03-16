@@ -43,16 +43,30 @@ public class ReservationService {
                 .plusHours(eventPackage.getDurationHr())
                 .plusMinutes(Reservation.CLEANUP_TIME_MINUTES);
 
-        List<Reservation> activeReservations = reservationRepository.findActiveReservations();
+        LocalDateTime dayStart = newReservationStart.toLocalDate().atStartOfDay();
+        LocalDateTime nextDayStart = dayStart.plusDays(1);
+
+        List<Reservation> activeReservations = reservationRepository
+                .findActiveReservationsForDay(dayStart, nextDayStart);
 
         for (Reservation reservation : activeReservations) {
-            if (Objects.equals(reservation.getId(), excludedReservationId)) {
-                continue;
-            }
-            
-            if (reservation.overlaps(newReservationStart, newReservationEnd)) {
+            if ((!Objects.equals(reservation.getId(), excludedReservationId))
+                && (reservation.overlaps(newReservationStart, newReservationEnd))) {
                 throw new ReservationOverlapException();
             }
+        }
+    }
+
+
+    public boolean isReservationTermAvailable(
+            final LocalDateTime newReservationStart,
+            final EventPackage eventPackage) {
+
+        try {
+            validateReservationOverlap(newReservationStart, eventPackage, null);
+            return true;
+        } catch (ReservationOverlapException e) {
+            return false;
         }
     }
 

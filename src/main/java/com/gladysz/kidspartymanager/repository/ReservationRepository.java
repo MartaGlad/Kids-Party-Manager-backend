@@ -1,15 +1,12 @@
 package com.gladysz.kidspartymanager.repository;
 
-import com.gladysz.kidspartymanager.domain.EventPackage;
 import com.gladysz.kidspartymanager.domain.Reservation;
 import com.gladysz.kidspartymanager.domain.Status;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,8 +17,13 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("""
        select r from Reservation r
        where r.status in ('NEW', 'CONFIRMED')
+              and r.eventDateTime >= :dayStart
+              and r.eventDateTime < :nextDayStart
        """)
-    List<Reservation> findActiveReservations();
+    List<Reservation> findActiveReservationsForDay(
+            @Param("dayStart") LocalDateTime dayStart,
+            @Param("nextDayStart") LocalDateTime nextDayStart
+    );
 
 
     @Query("""
@@ -38,7 +40,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
         """
     )
     List<Reservation> findConfirmedReservationsStartedBefore(@Param("now") LocalDateTime now);
-
 
     boolean existsByEventPackageId(Long eventId);
 
