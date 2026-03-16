@@ -2,6 +2,7 @@ package com.gladysz.kidspartymanager.controller;
 
 import com.gladysz.kidspartymanager.domain.Animator;
 import com.gladysz.kidspartymanager.dto.animator.AnimatorCreateDto;
+import com.gladysz.kidspartymanager.dto.animator.AnimatorRatingResponseDto;
 import com.gladysz.kidspartymanager.dto.animator.AnimatorResponseDto;
 import com.gladysz.kidspartymanager.dto.animator.AnimatorUpdateDto;
 import com.gladysz.kidspartymanager.mapper.AnimatorMapper;
@@ -84,5 +85,12 @@ public class AnimatorController {
 
         return ResponseEntity
                 .noContent().build();
+    }
+
+
+    @GetMapping("/{id}/rating")
+    public ResponseEntity<AnimatorRatingResponseDto> getAnimatorReservationRating(@PathVariable Long id) {
+
+        return ResponseEntity.ok(animatorService.getAnimatorReservationRating(id));
     }
 }

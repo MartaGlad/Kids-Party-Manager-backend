@@ -1,17 +1,22 @@
 package com.gladysz.kidspartymanager.service;
 
 import com.gladysz.kidspartymanager.domain.Animator;
+import com.gladysz.kidspartymanager.dto.animator.AnimatorRatingResponseDto;
 import com.gladysz.kidspartymanager.dto.animator.AnimatorUpdateDto;
 import com.gladysz.kidspartymanager.exception.animator.AnimatorDeleteException;
 import com.gladysz.kidspartymanager.exception.animator.AnimatorInactiveException;
 import com.gladysz.kidspartymanager.exception.animator.AnimatorNotFoundException;
 import com.gladysz.kidspartymanager.mapper.AnimatorMapper;
 import com.gladysz.kidspartymanager.repository.AnimatorRepository;
+import com.gladysz.kidspartymanager.repository.EventAssessmentRepository;
 import com.gladysz.kidspartymanager.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -22,6 +27,7 @@ public class AnimatorService {
     private final AnimatorRepository animatorRepository;
     private final AnimatorMapper animatorMapper;
     private final ReservationRepository reservationRepository;
+    private final EventAssessmentRepository eventAssessmentRepository;
 
 
     public Animator createAnimator(final Animator animator) {
@@ -79,6 +85,25 @@ public class AnimatorService {
             throw new AnimatorDeleteException(id);
         }
         animatorRepository.delete(fetchedAnimator);
+    }
+
+
+    public AnimatorRatingResponseDto getAnimatorReservationRating(final Long id) {
+
+        getAnimatorById(id);
+
+        Double averageRating = eventAssessmentRepository
+                .findAverageReservationRatingByAnimatorId(id);
+
+        long ratingsCount = eventAssessmentRepository
+                .countReservationRatingsByAnimatorId(id);
+
+        BigDecimal average =
+                averageRating == null
+                        ? BigDecimal.ZERO
+                        : BigDecimal.valueOf(averageRating).setScale(2, RoundingMode.HALF_UP);
+
+        return new AnimatorRatingResponseDto(id, average, ratingsCount);
     }
 }
 
