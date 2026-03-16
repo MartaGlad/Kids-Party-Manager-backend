@@ -6,6 +6,7 @@ import com.gladysz.kidspartymanager.domain.pricing.PricingResult;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationCreateDto;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
 import com.gladysz.kidspartymanager.exception.animator.AnimatorInactiveException;
+import com.gladysz.kidspartymanager.exception.reservation.ReservationFilteringException;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationNotFoundException;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationOverlapException;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationUpdateException;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -101,9 +103,32 @@ public class ReservationService {
 
 
     @Transactional(readOnly = true)
-    public List<Reservation> getAllReservations() {
+    public List<Reservation> getReservations(
+            Status status, LocalDate from, LocalDate to) {
 
-        return reservationRepository.findAll();
+        if (from != null && to != null && from.isAfter(to)) {
+            throw new ReservationFilteringException("Date \"from\" cannot be after date \"to\".");
+        }
+
+        if (status == null && from == null && to == null) {
+            return reservationRepository.findAll();
+        }
+
+        if (status != null && from == null && to == null) {
+            return reservationRepository.findByStatus(status);
+        }
+
+        if (status == null && from != null && to != null) {
+            return reservationRepository.findByEventDateTimeBetween(
+                    from.atStartOfDay(), to.plusDays(1).atStartOfDay());
+        }
+
+        if (status != null && from != null && to != null) {
+            return reservationRepository.findByStatusAndEventDateTimeBetween(
+                    status, from.atStartOfDay(), to.plusDays(1).atStartOfDay());
+        }
+
+        throw new ReservationFilteringException("Both dates \"from\" and \"to\" must be provided.");
     }
 
 
@@ -144,15 +169,6 @@ public class ReservationService {
         fetchedReservation.setPriceSnapshot(pricingResult.finalPricePln());
 
         return fetchedReservation;
-    }
-
-
-    public void deleteReservationById(final Long id) {
-
-        Reservation fetchedReservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new ReservationNotFoundException(id));
-
-        reservationRepository.delete(fetchedReservation);
     }
 
 

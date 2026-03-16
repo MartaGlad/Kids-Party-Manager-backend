@@ -1,6 +1,7 @@
 package com.gladysz.kidspartymanager.controller;
 
 import com.gladysz.kidspartymanager.domain.Reservation;
+import com.gladysz.kidspartymanager.domain.Status;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationChangeStatusDto;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationCreateDto;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationResponseDto;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -51,11 +53,15 @@ public class ReservationController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<ReservationResponseDto>> getAllReservations() {
+    @GetMapping()
+    public ResponseEntity<List<ReservationResponseDto>> getReservations(
+            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to) {
 
         return ResponseEntity
-                .ok(reservationMapper.mapToReservationResponseDtoList(reservationService.getAllReservations()));
+                    .ok(reservationMapper.mapToReservationResponseDtoList(
+                            reservationService.getReservations(status, from, to)));
     }
 
 
