@@ -67,13 +67,13 @@ public class ReservationController {
 
 
     @GetMapping()
-    public ResponseEntity<List<ReservationResponseDto>> getReservations(
+    public ResponseEntity<List<ReservationSummaryDto>> getReservations(
             @RequestParam(required = false) Status status,
             @RequestParam(required = false) LocalDate from,
             @RequestParam(required = false) LocalDate to) {
 
         return ResponseEntity
-                    .ok(reservationMapper.mapToReservationResponseDtoList(
+                    .ok(reservationMapper.mapToReservationSummaryDtoList(
                             reservationService.getReservations(status, from, to)));
     }
 

@@ -2,12 +2,11 @@ package com.gladysz.kidspartymanager.mapper;
 
 import com.gladysz.kidspartymanager.domain.Reservation;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationResponseDto;
+import com.gladysz.kidspartymanager.dto.reservation.ReservationSummaryDto;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
 
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +54,19 @@ public class ReservationMapper {
 
         return reservations.stream()
                 .map(this::mapToReservationResponseDto)
+                .collect(Collectors.toList());
+    }
+
+
+    public List<ReservationSummaryDto> mapToReservationSummaryDtoList(
+            final List<Reservation> reservations) {
+
+        return reservations.stream()
+                .map(r -> new ReservationSummaryDto(
+                        r.getId(), r.getEventPackage().getName(),
+                        r.getAnimator().getFirstName() +" " + r.getAnimator().getLastName(),
+                        r.getEventDateTime(), r.getChildrenCount(), r.getStatus(), r.getPriceSnapshot()
+                ))
                 .collect(Collectors.toList());
     }
 }
