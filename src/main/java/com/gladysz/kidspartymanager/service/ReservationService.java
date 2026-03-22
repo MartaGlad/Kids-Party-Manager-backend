@@ -6,10 +6,7 @@ import com.gladysz.kidspartymanager.domain.pricing.PricingResult;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationCreateDto;
 import com.gladysz.kidspartymanager.dto.reservation.ReservationUpdateDto;
 import com.gladysz.kidspartymanager.exception.animator.AnimatorInactiveException;
-import com.gladysz.kidspartymanager.exception.reservation.ReservationFilteringException;
-import com.gladysz.kidspartymanager.exception.reservation.ReservationNotFoundException;
-import com.gladysz.kidspartymanager.exception.reservation.ReservationOverlapException;
-import com.gladysz.kidspartymanager.exception.reservation.ReservationUpdateException;
+import com.gladysz.kidspartymanager.exception.reservation.*;
 import com.gladysz.kidspartymanager.mapper.ReservationMapper;
 import com.gladysz.kidspartymanager.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,6 +70,8 @@ public class ReservationService {
 
 
     public Reservation createNewReservation(final ReservationCreateDto reservationCreateDto) {
+
+        validateReservationTime(reservationCreateDto.eventDateTime());
 
         Reservation reservation = new Reservation();
 
@@ -150,6 +150,7 @@ public class ReservationService {
             final Long id,
             final ReservationUpdateDto reservationUpdateDto) {
 
+        validateReservationTime(reservationUpdateDto.eventDateTime());
 
         Reservation fetchedReservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ReservationNotFoundException(id));
@@ -223,6 +224,16 @@ public class ReservationService {
             if (r.shouldBeCompleted(now)) {
                 r.changeStatus(Status.COMPLETED);
             }
+        }
+    }
+
+
+    private void validateReservationTime(LocalDateTime eventDateTime) {
+
+        LocalTime time = eventDateTime.toLocalTime();
+
+        if (time.isBefore(LocalTime.of(8,0)) || time.isAfter(LocalTime.of(22,0))) {
+            throw new ReservationTimeException();
         }
     }
 }

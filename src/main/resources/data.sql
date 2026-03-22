@@ -6,12 +6,14 @@ VALUES
 
 INSERT INTO animators (id, first_name, last_name, email, phone, active)
 VALUES (1, 'Peter', 'Paper', 'peter.paper@example.com', '111222333', true),
-       (2, 'Alex', 'Cat', 'alex.cat@example.com', '444555666', true);
+       (2, 'Alex', 'Cat', 'alex.cat@example.com', '444555666', true),
+       (3, 'Oleg', 'Wolf', 'oleg.wolf@example.com', '188222333', false),
+       (4, 'Maria', 'Bee', 'maria.bee@example.com', '444577766', false);
 
 
 INSERT INTO orderers (id, first_name, last_name, email, phone)
 VALUES (1, 'Anna', 'Nowak', 'anna.nowak@example.com', '123123123'),
-        (2, 'Maria', 'Kowalska', 'maria.kowalska@example.com', '987987987');
+       (2, 'Maria', 'Kowalska', 'maria.kowalska@example.com', '987987987');
 
 
 INSERT INTO reservations (id, event_package_id, animator_id, orderer_id, event_date_time, holiday_flag,

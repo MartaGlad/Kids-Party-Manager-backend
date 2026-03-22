@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
             EventAssessmentNotAllowedException.class,
             ReservationChangeStatusException.class,
             ReservationFilteringException.class,
-            ReservationOverlapException.class,
+            ReservationTimeException.class,
             ReservationUpdateException.class
     })
     public ResponseEntity<String> handleBadRequestException(RuntimeException e) {
@@ -40,6 +40,7 @@ public class GlobalExceptionHandler {
             AnimatorDeleteException.class,
             EventPackageDeleteException.class,
             OrdererDeleteException.class,
+            ReservationOverlapException.class,
     })
     public ResponseEntity<String> handleConflictException(RuntimeException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
