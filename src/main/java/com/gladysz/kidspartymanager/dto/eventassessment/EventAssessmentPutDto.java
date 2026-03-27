@@ -6,5 +6,5 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record EventAssessmentPutDto(
-        @NotNull @Min(1) @Max(5) Integer rating, @Size(max = 600) String comment) {
-}
+        @NotNull @Min(1) @Max(5) Integer rating, @Size(max = 600) String comment
+){}

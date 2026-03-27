@@ -2,5 +2,7 @@ package com.gladysz.kidspartymanager.dto.orderer;
 
 import jakarta.validation.constraints.Email;
 
-public record OrdererUpdateDto(String firstName, String lastName, @Email String email, String phone) {
-}
+public record OrdererUpdateDto(
+        String firstName, String lastName,
+        @Email String email, String phone
+){}

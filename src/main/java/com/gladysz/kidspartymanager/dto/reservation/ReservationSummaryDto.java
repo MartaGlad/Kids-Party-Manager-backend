@@ -9,4 +9,4 @@ public record ReservationSummaryDto(
         Long id, String eventPackageName, String animatorName,
         LocalDateTime eventDateTime,
         int childrenCount, Status status, BigDecimal price
-) {}
+){}

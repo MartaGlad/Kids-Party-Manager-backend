@@ -14,9 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -95,15 +92,18 @@ public class AnimatorService {
         Double averageRating = eventAssessmentRepository
                 .findAverageReservationRatingByAnimatorId(id);
 
+        Double average = averageRating == null ? 0.0 : averageRating;
+
         long ratingsCount = eventAssessmentRepository
                 .countReservationRatingsByAnimatorId(id);
 
-        BigDecimal average =
-                averageRating == null
-                        ? BigDecimal.ZERO
-                        : BigDecimal.valueOf(averageRating).setScale(2, RoundingMode.HALF_UP);
-
         return new AnimatorRatingResponseDto(id, average, ratingsCount);
+    }
+
+
+    public List<AnimatorRatingResponseDto> getAllAverageRatings() {
+
+        return eventAssessmentRepository.findAllAverageReservationRatings();
     }
 }
 

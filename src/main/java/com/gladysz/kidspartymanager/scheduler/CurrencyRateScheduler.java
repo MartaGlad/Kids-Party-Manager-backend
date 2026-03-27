@@ -12,7 +12,7 @@ public class CurrencyRateScheduler {
     private final CurrencyRateService currencyRateService;
 
     @Scheduled(cron = "0 0 13 * * MON-FRI")
-    //@Scheduled(fixedRate = 10000)
+    //@Scheduled(fixedRate = Long.MAX_VALUE, initialDelay = 0)
     public void updateCurrentRates() {
 
         currencyRateService.fetchAndSaveActualRates();

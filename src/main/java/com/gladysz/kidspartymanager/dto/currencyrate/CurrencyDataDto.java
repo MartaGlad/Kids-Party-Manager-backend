@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
-public record CurrencyDataDto(Map<String, BigDecimal> currentRates,
-                              LocalDate effectiveDate) {
-}
+public record CurrencyDataDto(
+        Map<String, BigDecimal> currentRates,
+        LocalDate effectiveDate
+){}
