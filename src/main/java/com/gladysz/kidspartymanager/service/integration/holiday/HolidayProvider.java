@@ -1,8 +1,10 @@
 package com.gladysz.kidspartymanager.service.integration.holiday;
 
-import java.time.LocalDate;
+import com.gladysz.kidspartymanager.dto.holiday.NagerDateHolidayDto;
+
+import java.util.List;
 
 public interface HolidayProvider {
 
-    boolean isHoliday(LocalDate date, String countryCode);
+    List<NagerDateHolidayDto> getHolidays(int year, String countryCode);
 }

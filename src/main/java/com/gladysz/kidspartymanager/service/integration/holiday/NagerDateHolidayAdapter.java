@@ -7,9 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
-import java.time.LocalDate;
-import java.util.stream.Stream;
-
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -18,11 +17,15 @@ public class NagerDateHolidayAdapter implements HolidayProvider {
     private final RestClient restClient;
 
     @Override
-    public boolean isHoliday(LocalDate date, String countryCode) {
+    public List<NagerDateHolidayDto> getHolidays(int year, String countryCode) {
 
         try {
             NagerDateHolidayDto[] response = restClient.get()
-                    .uri("https://date.nager.at/api/v3/PublicHolidays/{year}/{countryCode}", date.getYear(), countryCode)
+                    .uri(
+                            "https://date.nager.at/api/v3/PublicHolidays/{year}/{countryCode}",
+                            year,
+                            countryCode
+                    )
                     .retrieve()
                     .body(NagerDateHolidayDto[].class);
 
@@ -30,8 +33,7 @@ public class NagerDateHolidayAdapter implements HolidayProvider {
                 throw new ExternalApiException("No response from Nager.Date received.");
             }
 
-            return Stream.of(response)
-                    .anyMatch(holiday -> holiday.date().equals(date));
+            return Arrays.stream(response).toList();
 
         } catch (RestClientException e) {
             throw new ExternalApiException("Failed to fetch holiday response from Nager.Date", e);

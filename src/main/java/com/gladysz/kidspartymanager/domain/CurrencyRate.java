@@ -43,7 +43,7 @@ public class CurrencyRate {
     public boolean equals(Object o) {
 
         if (this == o) return true;
-        if (! (o  instanceof CurrencyRate currencyRate)) return false;
+        if (! (o instanceof CurrencyRate currencyRate)) return false;
 
         return this.id != null && this.id.equals(currencyRate.id);
     }
