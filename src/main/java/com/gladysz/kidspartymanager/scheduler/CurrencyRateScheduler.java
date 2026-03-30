@@ -15,19 +15,19 @@ public class CurrencyRateScheduler {
     private final CurrencyRateService currencyRateService;
     private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyRateScheduler.class);
 
-    @Scheduled(cron = "0 0 13 * * MON-FRI")
     //@Scheduled(fixedRate = Long.MAX_VALUE, initialDelay = 0)
+    @Scheduled(cron = "0 0 13 * * MON-FRI")
     public void updateCurrentRates() {
 
-        LOGGER.info("Starting currency rates synchronization");
+        LOGGER.info("Starting currency rates synchronization.");
 
         long startTime = System.currentTimeMillis();
 
         try {
             currencyRateService.fetchAndSaveActualRates();
-            LOGGER.info("Currency rates synchronization finished");
+            LOGGER.info("Currency rates synchronization finished.");
         } catch (Exception e) {
-            LOGGER.error("Currency rates synchronization failed", e);
+            LOGGER.error("Currency rates synchronization failed.", e);
         } finally {
             LOGGER.info("Duration in ms = {}", System.currentTimeMillis() - startTime);
         }
