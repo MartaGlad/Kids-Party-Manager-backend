@@ -10,6 +10,8 @@ import com.gladysz.kidspartymanager.exception.reservation.*;
 import com.gladysz.kidspartymanager.mapper.ReservationMapper;
 import com.gladysz.kidspartymanager.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class ReservationService {
     private final AnimatorService animatorService;
     private final OrdererService ordererService;
     private final PricingService pricingService;
+    private final static Logger LOGGER = LoggerFactory.getLogger(ReservationService.class);
 
 
     private void validateReservationOverlap(
@@ -205,11 +208,15 @@ public class ReservationService {
         List<Reservation> reservationsToCancel = reservationRepository
                 .findExpiredNewReservations(now.minusHours(48));
 
+        int count = 0;
+
         for (Reservation r : reservationsToCancel) {
             if (r.shouldBeCancelled(now)) {
                 r.changeStatus(Status.CANCELLED);
+                count++;
             }
         }
+        LOGGER.info("Cancelled {} reservations.", count);
     }
 
 
@@ -220,11 +227,15 @@ public class ReservationService {
         List<Reservation> reservationsToComplete = reservationRepository
                 .findConfirmedReservationsStartedBefore(now);
 
+        int count = 0;
+
         for (Reservation r : reservationsToComplete) {
             if (r.shouldBeCompleted(now)) {
                 r.changeStatus(Status.COMPLETED);
+                count++;
             }
         }
+        LOGGER.info("Completed {} reservations.", count);
     }
 
 

@@ -35,7 +35,7 @@ public class HolidayScheduler {
         } catch (Exception e) {
             LOGGER.error("Holidays update failed.", e);
         } finally {
-            LOGGER.info("Duration in ms = {} ", System.currentTimeMillis() - startTime);
+            LOGGER.info("Duration in ms = {}", System.currentTimeMillis() - startTime);
         }
     }
 }
