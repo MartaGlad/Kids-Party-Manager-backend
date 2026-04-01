@@ -450,7 +450,118 @@ class ReservationServiceTest {
         //When & Then
         assertThrows(ReservationNotFoundException.class, () -> reservationService.updateReservation(1L, dto));
         verify(reservationRepository).findById(1L);
-
     }
 
+
+    @Test
+    void shouldCancelExpiredNewReservations() {
+
+        //Given
+        LocalDateTime oldCreatedAt = LocalDateTime.now().minusDays(4);
+
+        Reservation r1 = new Reservation();
+        r1.setStatus(Status.NEW);
+        r1.setCreatedAt(oldCreatedAt);
+
+        Reservation r2 = new Reservation();
+        r2.setStatus(Status.NEW);
+        r2.setCreatedAt(oldCreatedAt);
+
+        when(reservationRepository.findExpiredNewReservations(any(LocalDateTime.class)))
+                .thenReturn(List.of(r1, r2));
+
+        //When
+        reservationService.cancelExpiredReservations();
+
+        //Then
+        assertEquals(Status.CANCELLED, r1.getStatus());
+        assertEquals(Status.CANCELLED, r2.getStatus());
+        verify(reservationRepository).findExpiredNewReservations(any(LocalDateTime.class));
+    }
+
+
+    @Test
+    void shouldNotCancelReservationsWhenTheyAreNotExpired() {
+
+        //Given
+        LocalDateTime recentCreatedAt = LocalDateTime.now().minusHours(15);
+
+        Reservation r1 = new Reservation();
+        r1.setStatus(Status.NEW);
+        r1.setCreatedAt(recentCreatedAt);
+
+        Reservation r2 = new Reservation();
+        r2.setStatus(Status.NEW);
+        r2.setCreatedAt(recentCreatedAt);
+
+        when(reservationRepository.findExpiredNewReservations(any(LocalDateTime.class)))
+                .thenReturn(List.of(r1, r2));
+
+        //When
+        reservationService.cancelExpiredReservations();
+
+        //Then
+        assertEquals(Status.NEW, r1.getStatus());
+        assertEquals(Status.NEW, r2.getStatus());
+        verify(reservationRepository).findExpiredNewReservations(any(LocalDateTime.class));
+    }
+
+
+    @Test
+    void shouldCompleteFinishedConfirmedReservations() {
+
+        //Given
+        LocalDateTime now = LocalDateTime.now();
+
+        EventPackage eventPackage = new EventPackage();
+        eventPackage.setDurationHr(3);
+
+        Reservation r1 = new Reservation();
+        r1.setStatus(Status.CONFIRMED);
+        r1.setEventPackage(eventPackage);
+        r1.setEventDateTime(now.minusDays(1));
+
+        Reservation r2 = new Reservation();
+        r2.setStatus(Status.CONFIRMED);
+        r2.setEventPackage(eventPackage);
+        r2.setEventDateTime(now.minusHours(10));
+
+        when(reservationRepository.findConfirmedReservationsStartedBefore(any(LocalDateTime.class)))
+                .thenReturn(List.of(r1, r2));
+
+        //When
+        reservationService.completeFinishedReservations();
+
+        //Then
+        assertEquals(Status.COMPLETED, r1.getStatus());
+        assertEquals(Status.COMPLETED, r2.getStatus());
+        verify(reservationRepository).findConfirmedReservationsStartedBefore(any(LocalDateTime.class));
+    }
+
+
+    @Test
+    void shouldNotCompleteConfirmedReservationsWhenEventNotFinished() {
+
+        //Given
+        LocalDateTime now = LocalDateTime.now();
+
+        EventPackage eventPackage = new EventPackage();
+        eventPackage.setDurationHr(3);
+
+        Reservation r1 = new Reservation();
+        r1.setStatus(Status.CONFIRMED);
+        r1.setEventPackage(eventPackage);
+        r1.setEventDateTime(now.minusHours(3));
+
+
+        when(reservationRepository.findConfirmedReservationsStartedBefore(any(LocalDateTime.class)))
+                .thenReturn(List.of(r1));
+
+        //When
+        reservationService.completeFinishedReservations();
+
+        //Then
+        assertEquals(Status.CONFIRMED, r1.getStatus());
+        verify(reservationRepository).findConfirmedReservationsStartedBefore(any(LocalDateTime.class));
+    }
 }
