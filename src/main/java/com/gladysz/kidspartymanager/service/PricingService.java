@@ -29,8 +29,7 @@ public class PricingService {
 
         PricingStrategy pricingStrategy = holiday ? holidayPricingStrategy : standardPricingStrategy;
 
-        BigDecimal finalPricePln = pricingStrategy.
-                calculatePrice(eventPackage, childrenCount);
+        BigDecimal finalPricePln = pricingStrategy.calculatePrice(eventPackage, childrenCount);
 
         BigDecimal priceInEur = finalPricePln.divide(
                 currencyRateService.getRateByCode("EUR"),2, RoundingMode.HALF_UP);
@@ -43,6 +42,5 @@ public class PricingService {
 
 
         return new PricingResult(finalPricePln, priceInEur, priceInUsd, priceInGbp, holiday);
-
     }
 }
