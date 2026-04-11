@@ -1,4 +1,4 @@
-#  Kids Party Manager – Backend
+# Kids Party Manager – Backend
 
 ## Project Overview
 
@@ -51,7 +51,7 @@ Additional details:
 
 ---
 
-## Architecture & Design
+## Architecture
 
 The application is organized with clear separation of responsibilities.
 
@@ -158,6 +158,8 @@ Run the main Spring Boot application class `KidsPartyManagerApplication` from yo
 - Database schema is created automatically (ddl-auto=create)
 
 - Initial test data is loaded from data.sql 
+
+---
 
 ## Testing
 

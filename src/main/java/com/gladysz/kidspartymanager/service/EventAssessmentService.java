@@ -3,12 +3,9 @@ package com.gladysz.kidspartymanager.service;
 import com.gladysz.kidspartymanager.domain.*;
 
 import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentCreateDto;
-import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPatchDto;
-import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPutDto;
 import com.gladysz.kidspartymanager.exception.eventassessment.EventAlreadyAssessedException;
 import com.gladysz.kidspartymanager.exception.eventassessment.EventAssessmentNotAllowedException;
 import com.gladysz.kidspartymanager.exception.eventassessment.EventAssessmentNotFoundException;
-import com.gladysz.kidspartymanager.mapper.EventAssessmentMapper;
 import com.gladysz.kidspartymanager.repository.EventAssessmentRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Service;
 public class EventAssessmentService {
 
     private final EventAssessmentRepository eventAssessmentRepository;
-    private final EventAssessmentMapper eventAssessmentMapper;
     private final ReservationService reservationService;
 
 
@@ -30,8 +26,7 @@ public class EventAssessmentService {
             final Long reservationId,
             final EventAssessmentCreateDto eventAssessmentCreateDto) {
 
-        Reservation reservation = reservationService
-                .getReservationById(reservationId);
+        Reservation reservation = reservationService.getReservationById(reservationId);
 
         if (reservation.hasAssessment()) {
             throw new EventAlreadyAssessedException(reservationId);
@@ -53,6 +48,7 @@ public class EventAssessmentService {
 
     @Transactional(readOnly = true)
     public EventAssessment getByReservationId(final Long reservationId) {
+
         Reservation reservation = reservationService.getReservationById(reservationId);
 
         EventAssessment assessment = reservation.getEventAssessment();
@@ -60,30 +56,6 @@ public class EventAssessmentService {
             throw new EventAssessmentNotFoundException(reservationId);
         }
         return assessment;
-    }
-
-
-    public EventAssessment updatePatchByReservationId(
-            final Long reservationId,
-            final EventAssessmentPatchDto eventAssessmentPatchDto) {
-
-        EventAssessment fetchedAssessment = getByReservationId(reservationId);
-
-        eventAssessmentMapper.applyUpdatePatch(fetchedAssessment, eventAssessmentPatchDto);
-
-        return fetchedAssessment;
-    }
-
-
-    public EventAssessment updatePutByReservationId(
-            final Long reservationId,
-            final EventAssessmentPutDto eventAssessmentPutDto) {
-
-        EventAssessment fetchedAssessment = getByReservationId(reservationId);
-
-        eventAssessmentMapper.applyUpdatePut(fetchedAssessment, eventAssessmentPutDto);
-
-        return fetchedAssessment;
     }
 
 

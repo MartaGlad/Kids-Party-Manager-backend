@@ -2,8 +2,6 @@ package com.gladysz.kidspartymanager.controller;
 
 import com.gladysz.kidspartymanager.domain.EventAssessment;
 import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentCreateDto;
-import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPatchDto;
-import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentPutDto;
 import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentResponseDto;
 import com.gladysz.kidspartymanager.mapper.EventAssessmentMapper;
 import com.gladysz.kidspartymanager.service.EventAssessmentService;
@@ -47,33 +45,6 @@ public class EventAssessmentController {
 
         return ResponseEntity
                 .ok(eventAssessmentMapper.mapToEventAssessmentResponseDto(assessment));
-    }
-
-
-    @PutMapping()
-    public ResponseEntity<EventAssessmentResponseDto> updatePutEventAssessmentByReservationId (
-            @PathVariable Long reservationId,
-            @Valid @RequestBody EventAssessmentPutDto eventAssessmentPutDto) {
-
-        EventAssessment eventAssessmentUpdated = eventAssessmentService
-                .updatePutByReservationId(reservationId, eventAssessmentPutDto);
-
-        return ResponseEntity
-                .ok(eventAssessmentMapper.mapToEventAssessmentResponseDto(eventAssessmentUpdated));
-
-    }
-
-
-    @PatchMapping()
-    public ResponseEntity<EventAssessmentResponseDto> updatePatchEventAssessmentByReservationId (
-            @PathVariable Long reservationId,
-            @Valid @RequestBody EventAssessmentPatchDto eventAssessmentPatchDto) {
-
-        EventAssessment eventAssessmentUpdated = eventAssessmentService
-                .updatePatchByReservationId(reservationId, eventAssessmentPatchDto);
-
-        return ResponseEntity
-                .ok(eventAssessmentMapper.mapToEventAssessmentResponseDto(eventAssessmentUpdated));
     }
 
 
