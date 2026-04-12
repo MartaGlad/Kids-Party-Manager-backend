@@ -71,7 +71,8 @@ public class AnimatorServiceTest {
         List<Animator> animators = animatorService.getAllAnimators();
 
         //Then
-        assertEquals(1,  animators.size());
+        assertNotNull(animators);
+        assertEquals(1, animators.size());
         verify(animatorRepository).findAll();
     }
 
@@ -124,6 +125,7 @@ public class AnimatorServiceTest {
         //When & Then
         assertThrows(AnimatorNotFoundException.class,
                 () -> animatorService.updateAnimator(1L, dto));
+        verify(animatorMapper, never()).applyUpdate(any(), any());
     }
 
 
@@ -203,6 +205,7 @@ public class AnimatorServiceTest {
         //When & Then
         assertThrows(AnimatorNotFoundException.class,
                 () -> animatorService.deleteAnimatorById(1L));
+        verify(animatorRepository, never()).delete(any());
         verify(animatorRepository).findById(1L);
     }
 
@@ -220,6 +223,7 @@ public class AnimatorServiceTest {
         //When & Then
         assertThrows(AnimatorDeleteException.class,
                 () -> animatorService.deleteAnimatorById(1L));
+        verify(animatorRepository, never()).delete(any());
         verify(animatorRepository).findById(1L);
         verify(reservationRepository).existsByAnimatorId(1L);
     }

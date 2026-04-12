@@ -8,7 +8,6 @@ import com.gladysz.kidspartymanager.dto.eventassessment.EventAssessmentCreateDto
 import com.gladysz.kidspartymanager.exception.eventassessment.EventAlreadyAssessedException;
 import com.gladysz.kidspartymanager.exception.eventassessment.EventAssessmentNotAllowedException;
 import com.gladysz.kidspartymanager.exception.eventassessment.EventAssessmentNotFoundException;
-import com.gladysz.kidspartymanager.mapper.EventAssessmentMapper;
 import com.gladysz.kidspartymanager.repository.EventAssessmentRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,9 +28,6 @@ public class EventAssessmentServiceTest {
 
     @Mock
     private EventAssessmentRepository eventAssessmentRepository;
-
-    @Mock
-    private EventAssessmentMapper eventAssessmentMapper;
 
     @Mock
     private ReservationService reservationService;
