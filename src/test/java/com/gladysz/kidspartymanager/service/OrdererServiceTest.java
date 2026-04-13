@@ -1,11 +1,7 @@
 package com.gladysz.kidspartymanager.service;
 
-import com.gladysz.kidspartymanager.domain.Animator;
 import com.gladysz.kidspartymanager.domain.Orderer;
-import com.gladysz.kidspartymanager.dto.animator.AnimatorUpdateDto;
 import com.gladysz.kidspartymanager.dto.orderer.OrdererUpdateDto;
-import com.gladysz.kidspartymanager.exception.animator.AnimatorDeleteException;
-import com.gladysz.kidspartymanager.exception.animator.AnimatorNotFoundException;
 import com.gladysz.kidspartymanager.exception.orderer.OrdererDeleteException;
 import com.gladysz.kidspartymanager.exception.orderer.OrdererNotFoundException;
 import com.gladysz.kidspartymanager.mapper.OrdererMapper;
@@ -191,12 +187,6 @@ public class OrdererServiceTest {
         verify(reservationRepository).existsByOrdererId(1L);
         verify(ordererRepository, never()).delete(any());
     }
-
-
-
-
-
-
 }
 
 
