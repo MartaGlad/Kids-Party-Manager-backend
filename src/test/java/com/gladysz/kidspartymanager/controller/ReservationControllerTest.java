@@ -202,7 +202,7 @@ public class ReservationControllerTest {
         //Given
         doThrow(new ReservationNotFoundException(1L)).when(reservationService).getReservationById(1L);
 
-        //When and Then
+        //When & Then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/reservations/1")
                         .contentType(MediaType.APPLICATION_JSON))
