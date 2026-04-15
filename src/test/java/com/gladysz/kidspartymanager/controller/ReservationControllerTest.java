@@ -227,6 +227,7 @@ public class ReservationControllerTest {
         when(reservationService.getReservations(null, null, null)).thenReturn(List.of(r));
         when(reservationMapper.mapToReservationSummaryDtoList(anyList())).thenReturn(List.of(reservationSummaryDto));
 
+        //When & Then
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/reservations")
                         .contentType(MediaType.APPLICATION_JSON))

@@ -99,6 +99,7 @@ This ensures full observability of background processes.
 - Bean Validation (Jakarta Validation) 
 - MySQL (production database) 
 - H2 (test database) 
+- Spring Boot Test
 - Gradle (build tool) 
 - Lombok 
 
