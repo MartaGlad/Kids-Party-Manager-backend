@@ -52,15 +52,15 @@ public class NbpExchangeRateAdapter implements ExchangeRateProvider {
 
             Set<String> requiredCodes = Set.of("EUR", "USD", "GBP");
 
-            Map<String, BigDecimal> filteredRatesMap = rates.stream()
+            Map<String, BigDecimal> selectedRatesMap = rates.stream()
                     .filter(rate -> requiredCodes.contains(rate.code()))
                     .collect(Collectors.toMap(NbpRateDto::code, NbpRateDto::mid));
 
-            if (!filteredRatesMap.keySet().containsAll(requiredCodes)) {
+            if (!selectedRatesMap.keySet().containsAll(requiredCodes)) {
                 throw new ExternalApiException("Missing required codes in NBP response.");
             }
 
-            return new CurrencyDataDto(filteredRatesMap, effectiveDate);
+            return new CurrencyDataDto(selectedRatesMap, effectiveDate);
 
         } catch (RestClientException e) {
             LOGGER.error("Failed to fetch rates from NBP", e);

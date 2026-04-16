@@ -39,7 +39,7 @@ public class CurrencyRateService {
 
         CurrencyDataDto currencyDataDto = exchangeRateProvider.getCurrentCurrencyData();
 
-        Map<String, BigDecimal> rates = currencyDataDto.currentRates();
+        Map<String, BigDecimal> rates = currencyDataDto.selectedRates();
         LocalDate effectiveDate = currencyDataDto.effectiveDate();
 
         for (Map.Entry<String, BigDecimal> entry : rates.entrySet()) {
