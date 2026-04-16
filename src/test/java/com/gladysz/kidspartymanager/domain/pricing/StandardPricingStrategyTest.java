@@ -1,8 +1,6 @@
-package com.gladysz.kidspartymanager.service.pricing;
+package com.gladysz.kidspartymanager.domain.pricing;
 
 import com.gladysz.kidspartymanager.domain.EventPackage;
-import com.gladysz.kidspartymanager.domain.pricing.PricingStrategy;
-import com.gladysz.kidspartymanager.domain.pricing.StandardPricingStrategy;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

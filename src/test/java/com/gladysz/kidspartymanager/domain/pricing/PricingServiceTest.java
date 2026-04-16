@@ -1,9 +1,6 @@
-package com.gladysz.kidspartymanager.service.pricing;
+package com.gladysz.kidspartymanager.domain.pricing;
 
 import com.gladysz.kidspartymanager.domain.EventPackage;
-import com.gladysz.kidspartymanager.domain.pricing.HolidayPricingStrategy;
-import com.gladysz.kidspartymanager.domain.pricing.PricingResult;
-import com.gladysz.kidspartymanager.domain.pricing.StandardPricingStrategy;
 import com.gladysz.kidspartymanager.service.CurrencyRateService;
 import com.gladysz.kidspartymanager.service.HolidayService;
 import com.gladysz.kidspartymanager.service.PricingService;
