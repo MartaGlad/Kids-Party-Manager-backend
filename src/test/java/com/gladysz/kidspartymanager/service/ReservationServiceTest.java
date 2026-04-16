@@ -83,7 +83,7 @@ class ReservationServiceTest {
 
 
     @Test
-    void shouldReturnReservationsByStatusWhenOnlyStatusFilterProvided() {
+    void shouldReturnReservationsWhenOnlyStatusProvided() {
 
         //Given
         Reservation r1 = new Reservation();
@@ -107,7 +107,7 @@ class ReservationServiceTest {
 
 
     @Test
-    void shouldThrowExceptionWhenFromDateIsAfterToDate() {
+    void shouldThrowFilteringExceptionWhenFromDateIsAfterToDate() {
 
         //Given
         LocalDate fromDate = LocalDate.now();
@@ -120,7 +120,31 @@ class ReservationServiceTest {
 
 
     @Test
-    void shouldReturnReservationsBetweenDatesWhenOnlyDatesProvided() {
+    void shouldThrowFilteringExceptionWhenOnlyFromDateProvided() {
+
+        //Given
+        LocalDate fromDate = LocalDate.now().minusDays(5);
+
+        //When & Then
+        assertThrows(ReservationFilteringException.class,
+                () -> reservationService.getReservations(null, fromDate, null));
+    }
+
+
+    @Test
+    void shouldThrowFilteringExceptionWhenOnlyToDateProvided() {
+
+        //Given
+        LocalDate toDate = LocalDate.now().minusDays(5);
+
+        //When & Then
+        assertThrows(ReservationFilteringException.class,
+                () -> reservationService.getReservations(null, null, toDate));
+    }
+
+
+    @Test
+    void shouldReturnReservationsWhenOnlyDateRangeProvided() {
         //Given
         LocalDate fromDate = LocalDate.of(2026, 2, 16);
         LocalDate toDate = LocalDate.of(2026,3,20);
@@ -149,7 +173,7 @@ class ReservationServiceTest {
 
 
     @Test
-    public void shouldReturnReservationsByStatusAndDatesWhenAllFiltersProvided() {
+    public void shouldReturnReservationsWhenStatusAndDateRangeProvided() {
 
         //Given
         LocalDate fromDate = LocalDate.of(2026, 1, 10);
@@ -179,6 +203,58 @@ class ReservationServiceTest {
         assertTrue(reservations.containsAll(List.of(r1, r3)));
         verify(reservationRepository).findByStatusAndEventDateTimeBetween(
                 Status.COMPLETED, fromDate.atStartOfDay(), toDate.plusDays(1).atStartOfDay());
+    }
+
+
+    @Test
+    void shouldReturnTrueWhenReservationTermIsAvailable() {
+
+        //Given
+        EventPackage eventPackage = new EventPackage();
+        eventPackage.setDurationHr(2);
+
+        LocalDateTime newReservationStart = LocalDateTime.of(2026, 5, 16, 13,0);
+        LocalDateTime dayStart = newReservationStart.toLocalDate().atStartOfDay();
+        LocalDateTime nextDayStart = dayStart.plusDays(1);
+
+        when(reservationRepository.findActiveReservationsForDay(dayStart, nextDayStart))
+                .thenReturn(List.of());
+
+        //When
+        boolean result = reservationService.isReservationTermAvailable(newReservationStart, eventPackage);
+
+        //Then
+        assertTrue(result);
+        verify(reservationRepository).findActiveReservationsForDay(dayStart, nextDayStart);
+    }
+
+
+    @Test
+    void shouldReturnFalseWhenReservationTermIsUnavailable() {
+
+        //Given
+        EventPackage eventPackage = new EventPackage();
+        eventPackage.setDurationHr(2);
+
+        Reservation reservationExisted = new Reservation();
+        ReflectionTestUtils.setField(reservationExisted, "id", 20L);
+        reservationExisted.setEventDateTime(LocalDateTime.of(2026, 5, 16, 14, 0,0));
+        reservationExisted.setEventPackage(eventPackage);
+        reservationExisted.setStatus(Status.CONFIRMED);
+
+        LocalDateTime newReservationStart = LocalDateTime.of(2026, 5, 16, 13,0);
+        LocalDateTime dayStart = newReservationStart.toLocalDate().atStartOfDay();
+        LocalDateTime nextDayStart = dayStart.plusDays(1);
+
+        when(reservationRepository.findActiveReservationsForDay(dayStart, nextDayStart))
+                .thenReturn(List.of(reservationExisted));
+
+        //When
+        boolean result = reservationService.isReservationTermAvailable(newReservationStart, eventPackage);
+
+        //Then
+        assertFalse(result);
+        verify(reservationRepository).findActiveReservationsForDay(dayStart, nextDayStart);
     }
 
 
@@ -250,6 +326,40 @@ class ReservationServiceTest {
         assertEquals(pricingResult.finalPricePln(), r.getPriceSnapshot());
         assertFalse(r.isHolidayFlag());
         verify(reservationRepository).save(any(Reservation.class));
+    }
+
+
+    @Test
+    void shouldThrowExceptionWhenCreatingReservationTimeBeforeOpeningHours() {
+
+        //Given
+        ReservationCreateDto dto = new ReservationCreateDto(
+                1L, 1L, 1L,
+                LocalDateTime.of(2026, 1, 10, 6, 0,0),
+                16, 2);
+
+        //When & Then
+        assertThrows(ReservationTimeException.class,
+                () ->  reservationService.createNewReservation(dto));
+        verify(reservationRepository, never()).save(any());
+        verifyNoInteractions(eventPackageService);
+    }
+
+
+    @Test
+    void shouldThrowExceptionWhenCreatingReservationTimeAfterClosingHours() {
+
+        //Given
+        ReservationCreateDto dto = new ReservationCreateDto(
+                1L, 1L, 1L,
+                LocalDateTime.of(2026, 1, 10, 23, 0,0),
+                16, 2);
+
+        //When & Then
+        assertThrows(ReservationTimeException.class,
+                () ->  reservationService.createNewReservation(dto));
+        verify(reservationRepository, never()).save(any());
+        verifyNoInteractions(eventPackageService);
     }
 
 

@@ -159,12 +159,6 @@ public class Reservation {
     }
 
 
-    public boolean isActive() {
-
-        return status == Status.NEW || status == Status.CONFIRMED;
-    }
-
-
     @PrePersist
     void prePersist() {
 
