@@ -34,8 +34,8 @@ public class NagerDateHolidayAdapter implements HolidayProvider {
                     .retrieve()
                     .body(NagerDateHolidayDto[].class);
 
-            if (response == null) {
-                throw new ExternalApiException("No response from Nager.Date received.");
+            if (response == null || response.length == 0) {
+                throw new ExternalApiException("Empty response from Nager.Date received.");
             }
 
             LOGGER.info("Response from Nager.Date for the year {} received.", year);
