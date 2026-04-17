@@ -2,10 +2,7 @@ package com.gladysz.kidspartymanager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gladysz.kidspartymanager.domain.*;
-import com.gladysz.kidspartymanager.dto.reservation.ReservationCheckAvailabilityDto;
-import com.gladysz.kidspartymanager.dto.reservation.ReservationCreateDto;
-import com.gladysz.kidspartymanager.dto.reservation.ReservationResponseDto;
-import com.gladysz.kidspartymanager.dto.reservation.ReservationSummaryDto;
+import com.gladysz.kidspartymanager.dto.reservation.*;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationNotFoundException;
 import com.gladysz.kidspartymanager.exception.reservation.ReservationTimeException;
 import com.gladysz.kidspartymanager.mapper.ReservationMapper;
@@ -237,6 +234,74 @@ public class ReservationControllerTest {
 
         verify(reservationService).getReservations(null, null, null);
         verify(reservationMapper).mapToReservationSummaryDtoList(anyList());
+    }
+
+
+    @Test
+    void shouldUpdateReservationSuccessfully() throws Exception {
+
+        //Given
+        Long reservationId = 1L;
+        LocalDateTime eventDateTime = LocalDateTime.of(2026, 5, 10, 12, 0, 0);
+        LocalDateTime createdAt = LocalDateTime.of(2026, 4, 9, 13, 50, 0);
+
+        ReservationUpdateDto updateDto = new ReservationUpdateDto(1L, eventDateTime, 5, 6);
+
+        ReservationResponseDto responseDto = new ReservationResponseDto(
+                reservationId, 1L, 1L, 1L,
+                eventDateTime, false, 5, 6, Status.NEW, new BigDecimal("1000.00"), createdAt);
+
+
+        when(reservationService.updateReservation(eq(reservationId), any(ReservationUpdateDto.class))).thenReturn(new Reservation());
+        when(reservationMapper.mapToReservationResponseDto(any())).thenReturn(responseDto);
+
+        String jsonContent = objectMapper.writeValueAsString(updateDto);
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                        .patch("/api/v1/reservations/" + reservationId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(jsonContent))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.childrenCount").value(5));
+
+        verify(reservationService).updateReservation(eq(reservationId), any(ReservationUpdateDto.class));
+        verify(reservationMapper).mapToReservationResponseDto(any());
+    }
+
+
+    @Test
+    void shouldChangeReservationStatusSuccessfully() throws Exception {
+
+        //Given
+        Long reservationId = 1L;
+        LocalDateTime eventDateTime = LocalDateTime.of(2026, 5, 10, 12, 0, 0);
+        LocalDateTime createdAt = LocalDateTime.of(2026, 4, 9, 13, 50, 0);
+
+        ReservationChangeStatusDto changeStatusDto = new ReservationChangeStatusDto(Status.CANCELLED);
+        ReservationResponseDto responseDto = new ReservationResponseDto(
+                reservationId, 1L, 1L, 1L,
+                eventDateTime, false, 5, 6, Status.CANCELLED, new BigDecimal("1000.00"), createdAt);
+
+        when(reservationService.changeReservationStatusById(reservationId, Status.CANCELLED)).thenReturn(new Reservation());
+        when(reservationMapper.mapToReservationResponseDto(any())).thenReturn(responseDto);
+
+        String jsonContent = objectMapper.writeValueAsString(changeStatusDto);
+
+        //When & Then
+        mockMvc.perform(MockMvcRequestBuilders
+                .patch("/api/v1/reservations/" + reservationId + "/status")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(jsonContent))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("CANCELLED"));
+
+        verify(reservationService).changeReservationStatusById(reservationId, Status.CANCELLED);
+        verify(reservationMapper).mapToReservationResponseDto(any());
     }
 }
 
