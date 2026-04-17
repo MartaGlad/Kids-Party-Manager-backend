@@ -1,12 +1,9 @@
-package com.gladysz.kidspartymanager.service.integration;
+package com.gladysz.kidspartymanager.service.integration.exchangerate;
 
 import com.gladysz.kidspartymanager.dto.currencyrate.CurrencyDataDto;
 import com.gladysz.kidspartymanager.dto.currencyrate.NbpRateDto;
 import com.gladysz.kidspartymanager.dto.currencyrate.NbpTableDto;
-import com.gladysz.kidspartymanager.exception.animator.AnimatorInactiveException;
-import com.gladysz.kidspartymanager.exception.animator.AnimatorNotFoundException;
 import com.gladysz.kidspartymanager.exception.externalapi.ExternalApiException;
-import com.gladysz.kidspartymanager.service.integration.exchangerate.NbpExchangeRateAdapter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,9 +21,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 @ExtendWith(MockitoExtension.class)
 public class NbpExchangeRateAdapterTest {
+
+    private static final String URL = "https://api.nbp.pl/api/exchangerates/tables/A?format=json";
 
     @InjectMocks
     private NbpExchangeRateAdapter nbpExchangeRateAdapter;
@@ -53,7 +52,7 @@ public class NbpExchangeRateAdapterTest {
         RestClient.ResponseSpec mock3 = Mockito.mock(RestClient.ResponseSpec.class);
 
         when(restClient.get()).thenReturn(mock1);
-        when(mock1.uri("https://api.nbp.pl/api/exchangerates/tables/A?format=json")).thenReturn(mock2);
+        when(mock1.uri(URL)).thenReturn(mock2);
         when(mock2.retrieve()).thenReturn(mock3);
         when(mock3.body(NbpTableDto[].class)).thenReturn(response);
 
@@ -72,14 +71,14 @@ public class NbpExchangeRateAdapterTest {
         assertEquals(new BigDecimal("3.60"), currencyDataDto.selectedRates().get("USD"));
         assertEquals(new BigDecimal("4.87"), currencyDataDto.selectedRates().get("GBP"));
         verify(restClient).get();
-        verify(mock1).uri("https://api.nbp.pl/api/exchangerates/tables/A?format=json");
+        verify(mock1).uri(URL);
         verify(mock2).retrieve();
         verify(mock3).body(NbpTableDto[].class);
     }
 
 
     @Test
-    void shouldThrowExternalApiExceptionWhenResponseIsEmpty() {
+    void shouldThrowExternalApiExceptionWhenResponseIsNull() {
 
         //Given
         NbpTableDto[] response = null;
@@ -89,7 +88,7 @@ public class NbpExchangeRateAdapterTest {
         RestClient.ResponseSpec mock3 = Mockito.mock(RestClient.ResponseSpec.class);
 
         when(restClient.get()).thenReturn(mock1);
-        when(mock1.uri("https://api.nbp.pl/api/exchangerates/tables/A?format=json")).thenReturn(mock2);
+        when(mock1.uri(URL)).thenReturn(mock2);
         when(mock2.retrieve()).thenReturn(mock3);
         when(mock3.body(NbpTableDto[].class)).thenReturn(response);
 
@@ -98,7 +97,33 @@ public class NbpExchangeRateAdapterTest {
                 () -> nbpExchangeRateAdapter.getCurrentCurrencyData());
         assertEquals("Empty response from NBP received.", e.getMessage());
         verify(restClient).get();
-        verify(mock1).uri("https://api.nbp.pl/api/exchangerates/tables/A?format=json");
+        verify(mock1).uri(URL);
+        verify(mock2).retrieve();
+        verify(mock3).body(NbpTableDto[].class);
+    }
+
+
+    @Test
+    void shouldThrowExternalApiExceptionWhenResponseIsEmpty() {
+
+        //Given
+        NbpTableDto[] response = new NbpTableDto[0];
+
+        RestClient.RequestHeadersUriSpec mock1 = Mockito.mock(RestClient.RequestHeadersUriSpec.class);
+        RestClient.RequestHeadersSpec mock2 = Mockito.mock(RestClient.RequestHeadersSpec.class);
+        RestClient.ResponseSpec mock3 = Mockito.mock(RestClient.ResponseSpec.class);
+
+        when(restClient.get()).thenReturn(mock1);
+        when(mock1.uri(URL)).thenReturn(mock2);
+        when(mock2.retrieve()).thenReturn(mock3);
+        when(mock3.body(NbpTableDto[].class)).thenReturn(response);
+
+        //When & Then
+        ExternalApiException e = assertThrows(ExternalApiException.class,
+                () -> nbpExchangeRateAdapter.getCurrentCurrencyData());
+        assertEquals("Empty response from NBP received.", e.getMessage());
+        verify(restClient).get();
+        verify(mock1).uri(URL);
         verify(mock2).retrieve();
         verify(mock3).body(NbpTableDto[].class);
     }
@@ -121,7 +146,7 @@ public class NbpExchangeRateAdapterTest {
         RestClient.ResponseSpec mock3 = Mockito.mock(RestClient.ResponseSpec.class);
 
         when(restClient.get()).thenReturn(mock1);
-        when(mock1.uri("https://api.nbp.pl/api/exchangerates/tables/A?format=json")).thenReturn(mock2);
+        when(mock1.uri(URL)).thenReturn(mock2);
         when(mock2.retrieve()).thenReturn(mock3);
         when(mock3.body(NbpTableDto[].class)).thenReturn(response);
 
@@ -130,7 +155,7 @@ public class NbpExchangeRateAdapterTest {
                 () -> nbpExchangeRateAdapter.getCurrentCurrencyData());
         assertEquals("Missing required codes in NBP response.", e.getMessage());
         verify(restClient).get();
-        verify(mock1).uri("https://api.nbp.pl/api/exchangerates/tables/A?format=json");
+        verify(mock1).uri(URL);
         verify(mock2).retrieve();
         verify(mock3).body(NbpTableDto[].class);
     }
@@ -140,7 +165,7 @@ public class NbpExchangeRateAdapterTest {
     void shouldThrowExternalApiExceptionWhenRestClientFails() {
 
         //Given
-        when(restClient.get()).thenThrow(new RestClientException(""));
+        when(restClient.get()).thenThrow(new RestClientException("Error"));
 
         //When & Then
         ExternalApiException e = assertThrows(ExternalApiException.class,
