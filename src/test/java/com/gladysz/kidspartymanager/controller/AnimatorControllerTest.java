@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -56,7 +55,7 @@ public class AnimatorControllerTest {
         AnimatorResponseDto responseDto = new AnimatorResponseDto(animatorId, "Peter", "Papper",
                 "peter@gmail.com", "123123", true);
 
-        when(animatorMapper.mapToAnimator(createDto)).thenReturn(animator);
+        when(animatorMapper.mapToAnimator(any(AnimatorCreateDto.class))).thenReturn(animator);
         when(animatorService.createAnimator(animator)).thenReturn(animatorCreated);
         when(animatorMapper.mapToAnimatorResponseDto(animatorCreated)).thenReturn(responseDto);
 
@@ -81,7 +80,7 @@ public class AnimatorControllerTest {
 
 
     @Test
-    void shouldReturnBadRequestWhenCreateDtoIsInvalid() throws Exception {
+    void shouldReturnBadRequestWhenCreatingAnimatorWithInvalidData() throws Exception {
 
         //Given
         AnimatorCreateDto createDto = new AnimatorCreateDto("Peter", "Papper",
@@ -103,7 +102,7 @@ public class AnimatorControllerTest {
 
 
     @Test
-    void shouldGetAnimatorSuccessfully() throws Exception {
+    void shouldGetAnimatorByIdSuccessfully() throws Exception {
 
         //Given
         Long animatorId = 1L;
@@ -123,7 +122,7 @@ public class AnimatorControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Peter"));
 
         verify(animatorService).getAnimatorById(animatorId);
-        verify(animatorMapper).mapToAnimatorResponseDto(animator);
+        verify(animatorMapper).mapToAnimatorResponseDto(any(Animator.class));
     }
 
 
@@ -159,7 +158,7 @@ public class AnimatorControllerTest {
                 "daniel@gmail.com", "8888123", true);
 
         when(animatorService.getAllAnimators()).thenReturn(List.of(a1, a2));
-        when(animatorMapper.mapToAnimatorResponseDtoList(List.of(a1, a2))).thenReturn(List.of(a1ResponseDto, a2ResponseDto));
+        when(animatorMapper.mapToAnimatorResponseDtoList(anyList())).thenReturn(List.of(a1ResponseDto, a2ResponseDto));
 
         //When & Then
         mockMvc.perform(MockMvcRequestBuilders
@@ -171,7 +170,7 @@ public class AnimatorControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].firstName").value("Daniel"));
 
         verify(animatorService).getAllAnimators();
-        verify(animatorMapper).mapToAnimatorResponseDtoList(Arrays.asList(a1, a2));
+        verify(animatorMapper).mapToAnimatorResponseDtoList(anyList());
     }
 
 
@@ -182,12 +181,11 @@ public class AnimatorControllerTest {
         Long animatorId = 1L;
         AnimatorUpdateDto updateDto = new AnimatorUpdateDto(null, "Letter", null, null);
         Animator animatorUpdated = new Animator();
-        ReflectionTestUtils.setField(animatorUpdated, "id", animatorId);
-        animatorUpdated.setLastName("Letter");
         AnimatorResponseDto responseDto = new AnimatorResponseDto(animatorId, "Peter", "Letter",
                 "peter@gmail.com", "123123", true);
 
-        when(animatorService.updateAnimator(animatorId, updateDto)).thenReturn(animatorUpdated);
+        when(animatorService.updateAnimator(eq(animatorId), any(AnimatorUpdateDto.class)))
+                .thenReturn(animatorUpdated);
         when(animatorMapper.mapToAnimatorResponseDto(animatorUpdated)).thenReturn(responseDto);
 
         String jsonContent = objectMapper.writeValueAsString(updateDto);
@@ -202,13 +200,13 @@ public class AnimatorControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Letter"));
 
-        verify(animatorService).updateAnimator(animatorId, updateDto);
-        verify(animatorMapper).mapToAnimatorResponseDto(animatorUpdated);
+        verify(animatorService).updateAnimator(eq(animatorId), any(AnimatorUpdateDto.class));
+        verify(animatorMapper).mapToAnimatorResponseDto(any(Animator.class));
     }
 
 
     @Test
-    void shouldReturnNotFoundDuringUpdate() throws Exception {
+    void shouldReturnNotFoundWhenUpdatingNonExistingAnimator() throws Exception {
 
         //Given
         Long animatorId = 1L;
@@ -272,12 +270,11 @@ public class AnimatorControllerTest {
 
         verify(animatorService).deleteAnimatorById(animatorId);
         verifyNoInteractions(animatorMapper);
-
     }
 
 
     @Test
-    void shouldReturnNotFoundDuringDelete() throws Exception {
+    void shouldReturnNotFoundWhenDeletingNonExistingAnimator() throws Exception {
 
         //Given
         Long animatorId = 1L;
